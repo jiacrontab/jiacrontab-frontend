@@ -1,0 +1,27 @@
+.stat-box {
+    position: relative;
+}
+
+.stat-box p {
+    margin-bottom: 4px;
+}
+
+.stat-box .stat-num {
+    color: #3f8600;
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+.stat-box::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 70%;
+    top: 15%;
+    right: 20px;
+    background: #ccc;
+}
+
+.no-border::after {
+    width: 0;
+}

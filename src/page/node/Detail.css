@@ -1,0 +1,134 @@
+.header {
+    position: relative;
+    padding: 0;
+    background: #fff;
+}
+
+.trigger-icon {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color .3s;
+    float: left;
+}
+
+.trigger-icon svg {
+    vertical-align: middle;
+}
+
+.trigger-icon:hover {
+    color: #1890ff;
+}
+
+.logo {
+    width: 162px;
+    float: left;
+    text-align: center;
+}
+
+.large-w {
+    font-size: 26px;
+}
+
+.min-w {
+    font-size: 30px;
+}
+
+.stop {
+    padding: 2px 4px;
+    background: #FF5722;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 13px;
+}
+
+.running {
+    padding: 2px 4px;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 13px;
+    background: #1E9FFF;
+}
+
+table {
+    table-layout: fixed;
+}
+
+
+.down-menu {
+    cursor: pointer;
+}
+
+.ant-popover-inner-content {
+    padding: 5px 0;
+}
+
+.down-menu p {
+    padding: 6px 10px;
+    margin: 0;
+}
+
+.down-menu p:hover {
+    background: #e8e8e8;
+}
+
+.table-btn {
+    padding-bottom: 12px;
+}
+
+.table-btn button {
+    margin-right: 10px;
+}
+
+.stop-button {
+    background-color: #FF5722;
+    border-color: #FF5722;
+}
+
+.stop-button:hover {
+    background-color: #ff5722c9;
+    border-color: #ff5722c9;
+}
+
+.add-button {
+    background-color: #FF5722;
+    border-color: #FF5722;
+}
+
+.delete-button {
+    background-color: #EE9A00;
+    border-color: #EE9A00;
+}
+
+.delete-button:hover {
+    background-color: rgba(238, 155, 0, 0.726);
+    border-color: rgba(238, 155, 0, 0.726);
+}
+
+.audit-button {
+    background-color: #87d068;
+    border-color: #87d068;
+}
+
+.audit-button:hover {
+    background-color: #87d068b2;
+    border-color: #87d068b2;
+}
+
+
+
+.operat-more {
+    cursor: pointer;
+    margin-left: 10px;
+    color: #1890ff;
+}
+
+.split-line {
+    background-color: #e8e8e8;
+    width: 1px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: -2px;
+    margin-left: 10px;
+}

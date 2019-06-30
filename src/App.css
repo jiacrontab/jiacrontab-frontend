@@ -1,0 +1,21 @@
+@import '~antd/dist/antd.css';
+
+ul.ant-skeleton-paragraph {
+    padding-left: 10px;
+}
+.jia-confirm-btn .ant-modal-confirm-btns button {
+    display: none;
+}
+
+.run-info-page .ant-card {
+    margin-top: 12px;
+}
+
+.middle-center {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+}

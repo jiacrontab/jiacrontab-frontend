@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "4378a343-33ff-47c0-8b8a-bc2a47c4aec6",
+		"name": "jiacrontab",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "注册用户",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f962b90-9639-4f79-9801-89ecbcba2b08",
+						"exec": [
+							"pm.globals.get(\"variable_key\");",
+							"pm.globals.get(\"variable_key\");",
+							"pm.globals.get(\"variable_key\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"iwannay\",\n\t\"passwd\":\"123456\",\n\t\"groupID\":0,\n\t\"root\":true,\n\t\"mail\":\"772648576@qq.com\"\n}"
+				},
+				"url": {
+					"raw": "{{$host}}/user/signUp",
+					"host": [
+						"{{$host}}"
+					],
+					"path": [
+						"user",
+						"signUp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "登录",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"iwannay\",\n\t\"passwd\":\"123456\",\n\t\"remember\":true\n}"
+				},
+				"url": {
+					"raw": "{{$host}}/user/login",
+					"host": [
+						"{{$host}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "节点列表",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTIyODkwMDAsIlVzZXJJRCI6MSwiTWFpbCI6Ijc3MjY0ODU3NkBxcS5jb20iLCJVc2VybmFtZSI6Iml3YW5uYXkiLCJHcm91cElEIjowLCJSb290Ijp0cnVlfQ.-ESQfkVVWs7EoLQOnnvuD-Lp9MzKbd-aHlo0yCEJ6_4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"page\":1,\n\t\"pagesize\":50\n}"
+				},
+				"url": {
+					"raw": "{{$host}}/adm/node/list",
+					"host": [
+						"{{$host}}"
+					],
+					"path": [
+						"adm",
+						"node",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获得配置信息",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTIyODkwMDAsIlVzZXJJRCI6MSwiTWFpbCI6Ijc3MjY0ODU3NkBxcS5jb20iLCJVc2VybmFtZSI6Iml3YW5uYXkiLCJHcm91cElEIjowLCJSb290Ijp0cnVlfQ.-ESQfkVVWs7EoLQOnnvuD-Lp9MzKbd-aHlo0yCEJ6_4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{$host}}/adm/config/get",
+					"host": [
+						"{{$host}}"
+					],
+					"path": [
+						"adm",
+						"config",
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "编辑定时任务",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTIwNDIzOTUsIlVzZXJuYW1lIjoiaXdhbm5heSIsIkdyb3VwSUQiOjAsIlJvb3QiOnRydWV9.GmGH1ZRPiqP_TBvb7gtt5xaE6coVDrt73hu6EnbPHZs",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":1,\n\t\"addr\":\"localhost:20001\",\n\t\"name\":\"tessss2\",\n\t\"commands\":[\"ls\",\"-a\"],\n\t\"timeout\":3500,\n\t\"maxConcurrent\":2,\n\t\"errormailNotify\":true,\n\t\"mailTo\":[\"haha\"],\n\t\"pipeCommands\":[[\"ls\",\"-a\"],[\"date\"]],\n\t\"month\":\"*\",\n\t\"dependJobs\":[{\"name\":\"d1\"}]\n}"
+				},
+				"url": {
+					"raw": "{{$host}}/adm/crontab/job/edit",
+					"host": [
+						"{{$host}}"
+					],
+					"path": [
+						"adm",
+						"crontab",
+						"job",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

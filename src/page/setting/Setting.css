@@ -1,0 +1,21 @@
+.setting-page {
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: #fff;
+}
+
+.setting-left {
+    overflow: auto;
+    width: 256px;
+    position: absolute;
+    left: 0px;
+    bottom: 0;
+    top: 0;
+}
+
+.setting-box {
+    padding: 20px;
+}

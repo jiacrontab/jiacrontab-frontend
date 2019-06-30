@@ -1,0 +1,37 @@
+.init-page .ant-layout {
+    background: none;
+    position: relative;
+    z-index: 2;
+}
+
+.init-page .login-panel {
+    width: 90%;
+    max-width: 420px;
+    margin: 3% auto 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 1px 2px 15px rgba(0, 0, 0, .3);
+}
+
+.init-page .login-header {
+    text-align: center;
+    font-size: 36px;
+    line-height: 44px;
+    color: #172B4D;
+}
+
+.init-page .login-sub {
+    text-align: center;
+    color: #1890ff;
+    padding-top: 6px;
+    padding-bottom: 20px;
+}
+
+.init-page .login-form-button {
+    height: 42px;
+    line-height: 42px;
+}
+
+.init-page .ant-form-item {
+    margin-bottom: 14px;
+}
