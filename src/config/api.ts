@@ -107,6 +107,14 @@ const API = {
         method: 'post',
         url: '/v2/user/signup'
     },
+    editUser: {
+        method: 'post',
+        url: '/v2/user/edit'
+    },
+    deleteUser: {
+        method: 'post',
+        url: '/v2/user/delete'
+    },
     systemInfo: {
         method: 'post',
         url: '/v2/system/info'
