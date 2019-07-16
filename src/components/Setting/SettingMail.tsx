@@ -4,7 +4,7 @@ import { FormComponentProps } from 'antd/lib/form'
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
 
-interface Props {}
+interface Props { }
 interface State {
     loading: boolean
     token: any
@@ -97,7 +97,7 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-                    {lableKey.map(function(ele, index) {
+                    {lableKey.map(function (ele, index) {
                         return defaultData[ele] !== '' ? (
                             <Form.Item
                                 {...formItemLayout}
@@ -133,7 +133,7 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
                             htmlType="submit"
                             loading={this.state.loading}
                         >
-                            发送
+                            提交
                         </Button>
                     </Form.Item>
                 </Form>

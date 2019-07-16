@@ -292,6 +292,33 @@ class UserList extends React.Component<Props, State> {
             this.getGroupList()
         }
     }
+    private removeUserList = (record: any) => {
+        console.log(record)
+        this.setState({
+            loading: true
+        })
+        getRequest({
+            url: API.deleteUser,
+            token: this.data.token,
+            data: {
+                userID: record.ID,
+            },
+            succ: (data: any) => {
+                console.log(data)
+                this.getUserList()
+            },
+            error: () => {
+                this.setState({
+                    loading: false
+                })
+            },
+            catch: () => {
+                this.setState({
+                    loading: false
+                })
+            }
+        })
+    }
 
     public render(): any {
         const runColumns: any[] = [
@@ -328,19 +355,34 @@ class UserList extends React.Component<Props, State> {
             {
                 title: '操作',
                 key: 'operate',
+                width: 140,
                 render: (val: any) => {
                     return (
-                        <Button
-                            href="javascript:;"
-                            htmlType="button"
-                            size="small"
-                            type="primary"
-                            onClick={() => {
-                                this.handle(val)
-                            }}
-                        >
-                            设置
-                        </Button>
+                        <React.Fragment>
+                            <Button
+                                href="javascript:;"
+                                htmlType="button"
+                                size="small"
+                                type="primary"
+                                style={{ marginRight: 8 }}
+                                onClick={() => {
+                                    this.handle(val)
+                                }}
+                            >
+                                设置
+                            </Button>
+                            <Button
+                                href="javascript:;"
+                                htmlType="button"
+                                size="small"
+                                type="danger"
+                                onClick={() => {
+                                    this.removeUserList(val)
+                                }}
+                            >
+                                删除
+                            </Button>
+                        </React.Fragment>
                     )
                 }
             }

@@ -61,8 +61,14 @@ class HomeLayout extends React.Component<Props, State> {
             this.showConfirm()
         }
         if (item.key === 'setting') {
-            if (hashHistory.location.pathname == '/setting') return
-            hashHistory.push('/setting')
+            if (this.state.groupID === 1 && this.state.root) {
+                if (hashHistory.location.pathname == '/setting/mail') return
+                hashHistory.push('/setting/mail')
+            } else {
+                if (hashHistory.location.pathname == '/setting/chpwd') return
+                hashHistory.push('/setting/chpwd')
+            }
+
         }
     }
     private showConfirm = () => {
@@ -79,17 +85,15 @@ class HomeLayout extends React.Component<Props, State> {
     }
     render() {
         const { children } = this.props
-        let { userName, colors, groupID, root } = this.state
+        let { userName, colors, groupID } = this.state
         let colorIndex = userName.charCodeAt(0) % 10
         const menu = (
             <Menu onClick={this.menuItemEvent}>
-                {groupID === 1 && root ? (
-                    <Menu.Item key="setting">
-                        <Icon type="setting" />
-                        应用设置
-                    </Menu.Item>
-                ) : null}
-                {/* <Menu.Divider /> */}
+                <Menu.Item key="setting">
+                    <Icon type="setting" />
+                    应用设置
+                </Menu.Item>
+                <Menu.Divider />
                 <Menu.Item key="logout">
                     <Icon type="logout" />
                     退出登录

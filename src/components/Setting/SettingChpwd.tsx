@@ -1,15 +1,16 @@
 import * as React from 'react'
-import { Form, Input, Button, Icon, Radio, Select, Checkbox, Modal } from 'antd'
+import { Form, Input, Button, Icon, Modal } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
+import { hashHistory } from '../../utils/history'
 
 interface Props { }
 interface State {
     token: string | null
     loading: boolean
-    radioValue: string
-    groups: any[]
+    user: string,
+    userID: Number
 }
 class SettingUser extends React.Component<Props & FormComponentProps, State> {
     public state: State
@@ -17,61 +18,37 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
         super(props)
         this.state = {
             loading: false,
-            radioValue: 'new',
-            groups: [],
-            token: ''
+            token: '',
+            user: '',
+            userID: -1
         }
     }
 
     componentDidMount() {
         if (window.localStorage) {
-            this.setState(
-                {
-                    token: localStorage.getItem('jiaToken')
-                },
-                () => {
-                    this.getGroupList()
-                }
-            )
-        }
-    }
-
-    private getGroupList() {
-        getRequest({
-            url: API.groupList,
-            token: this.state.token,
-            data: {
-                page: 1,
-                pagesize: 9999
-            },
-            succ: (data: any) => {
-                let groups = JSON.parse(data)
+            if (localStorage.getItem('userInfo')) {
+                let userInfos: any = localStorage.getItem('userInfo')
                 this.setState({
-                    groups: groups.list
+                    user: JSON.parse(userInfos).username,
+                    userID: JSON.parse(userInfos).userID,
                 })
             }
-        })
+            this.setState({
+                token: localStorage.getItem('jiaToken')
+            })
+        }
     }
 
-    private submitSetting(values: any) {
-        let defaultParams = {
+    private changePassword(values: any) {
+        let params = {
             username: values.username,
+            oldpwd: values.oldpwd,
             passwd: values.passwd,
-            root: values.root,
-            mail: values.mail
+            userID: this.state.userID
         }
-        let groupName = {
-            groupName: values.groupName
-        }
-        let groupId = {
-            groupId: values.groupId
-        }
-        let params =
-            values.groupType === 'new'
-                ? { ...defaultParams, ...groupName }
-                : { ...defaultParams, ...groupId }
+
         getRequest({
-            url: API.userSignup,
+            url: API.editUser,
             token: this.state.token,
             data: params,
             succ: (data: any) => {
@@ -80,9 +57,12 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                 })
                 Modal.success({
                     title: '温馨提示',
-                    content: '添加成功',
+                    content: '修改成功,请重新登陆',
                     onOk: () => {
                         this.props.form.resetFields()
+                        localStorage.removeItem('jiaToken')
+                        localStorage.removeItem('userInfo')
+                        hashHistory.push('/login')
                     }
                 })
             },
@@ -90,7 +70,6 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                 this.setState({
                     loading: false
                 })
-                this.props.form.resetFields()
             },
             catch: () => {
                 this.setState({
@@ -100,6 +79,15 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
         })
     }
 
+    private compareToFirstPassword = (rule: any, value: string, callback: any) => {
+        const { form } = this.props;
+        if (value && value !== form.getFieldValue('passwd')) {
+            callback('两次输入的密码不一致，请重新输入!');
+        } else {
+            callback();
+        }
+    }
+
     private handleSubmit = (e: any) => {
         e.preventDefault()
         this.props.form.validateFields((err: any, values: any) => {
@@ -107,29 +95,25 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                 this.setState({
                     loading: true
                 })
-                this.submitSetting(values)
+                this.changePassword(values)
             }
         })
     }
-    private radioChange = (e: any) => {
-        this.setState({
-            radioValue: e.target.value
-        })
-    }
+
 
     render() {
         const { form } = this.props
         const { getFieldDecorator } = form
-        const { groups } = this.state
+        let { user } = this.state
 
         const formItemLayout = {
-            labelCol: { span: 3 },
+            labelCol: { span: 4 },
             wrapperCol: { span: 10 }
         }
         const formTailLayout = {
             wrapperCol: {
-                xs: { span: 10, offset: 3 },
-                sm: { span: 10, offset: 3 }
+                xs: { span: 10, offset: 4 },
+                sm: { span: 10, offset: 4 }
             }
         }
 
@@ -138,6 +122,7 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                 <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
                     <Form.Item {...formItemLayout} label="用户名">
                         {getFieldDecorator('username', {
+                            initialValue: user,
                             rules: [
                                 {
                                     message: '请输入用户名',
@@ -159,11 +144,35 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                             />
                         )}
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="密码">
+                    <Form.Item {...formItemLayout} label="旧密码">
+                        {getFieldDecorator('oldpwd', {
+                            rules: [
+                                {
+                                    message: '请输入旧密码',
+                                    required: true,
+                                    whitespace: true
+                                }
+                            ]
+                        })(
+                            <Input
+                                name="oldpwd"
+                                size="large"
+                                prefix={
+                                    <Icon
+                                        type="lock"
+                                        style={{ color: 'rgba(0,0,0,.25)' }}
+                                    />
+                                }
+                                type="password"
+                                placeholder="请输入旧密码"
+                            />
+                        )}
+                    </Form.Item>
+                    <Form.Item {...formItemLayout} label="新密码">
                         {getFieldDecorator('passwd', {
                             rules: [
                                 {
-                                    message: '请输入密码',
+                                    message: '请输入新的密码',
                                     required: true,
                                     whitespace: true
                                 }
@@ -179,81 +188,38 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                                     />
                                 }
                                 type="password"
-                                placeholder="请输入密码"
+                                placeholder="请输入新的密码"
                             />
                         )}
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="邮箱">
-                        {getFieldDecorator('mail', {
+                    <Form.Item {...formItemLayout} label="确认新密码">
+                        {getFieldDecorator('confirmpwd', {
                             rules: [
                                 {
-                                    message: '请输入邮箱地址',
-                                    required: true
+                                    message: '请确认新密码',
+                                    required: true,
+                                    whitespace: true
+                                },
+                                {
+                                    validator: this.compareToFirstPassword,
                                 }
                             ]
                         })(
                             <Input
+                                name="confirmpwd"
                                 size="large"
                                 prefix={
                                     <Icon
-                                        type="mail"
+                                        type="lock"
                                         style={{ color: 'rgba(0,0,0,.25)' }}
                                     />
                                 }
-                                type="email"
-                                placeholder="请输入邮箱地址"
+                                type="password"
+                                placeholder="请确认新密码"
                             />
                         )}
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="分组">
-                        {getFieldDecorator('groupType', {
-                            initialValue: this.state.radioValue
-                        })(
-                            <Radio.Group onChange={this.radioChange}>
-                                <Radio value="new">新建</Radio>
-                                <Radio value="move">移动到指定分组</Radio>
-                            </Radio.Group>
-                        )}
-                    </Form.Item>
-                    {this.state.radioValue == 'new' ? (
-                        <Form.Item {...formTailLayout}>
-                            {getFieldDecorator('groupName', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入分组名称'
-                                    }
-                                ]
-                            })(<Input placeholder="请输入分组名称" />)}
-                        </Form.Item>
-                    ) : (
-                            <Form.Item {...formTailLayout}>
-                                {getFieldDecorator('groupId', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请选择一个分组'
-                                        }
-                                    ]
-                                })(
-                                    <Select placeholder="请选择一个分组">
-                                        {groups.map((value: any) => {
-                                            return (
-                                                <Select.Option
-                                                    key={value['ID']}
-                                                    value={value['ID']}
-                                                >
-                                                    {value['name']}
-                                                </Select.Option>
-                                            )
-                                        })}
-                                    </Select>
-                                )}
-                            </Form.Item>
-                        )}
-                    <Form.Item {...formTailLayout}>
-                        {getFieldDecorator('root')(<Checkbox>管理员</Checkbox>)}
-                    </Form.Item>
+
                     <Form.Item {...formTailLayout}>
                         <Button
                             style={{ minWidth: 120, height: 38 }}
