@@ -1,5 +1,6 @@
 jiacrontab-frontend 前端代码
-
+## 安装包管理工具
+[安装yarn](https://yarnpkg.com)
 ## 安装依赖
 
 ```
