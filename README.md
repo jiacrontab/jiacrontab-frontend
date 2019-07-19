@@ -35,3 +35,14 @@ yarn start
 ```
 yarn build
 ```
+
+## 打包jiacrontab
+```sh
+go get -u github.com/kataras/bindata/cmd/bindata
+cd jiacrontab/jiacrontab_admin
+// 生成bindata_gzip.go
+bindata -pkg admin ./assets/...
+
+cd ..
+make build
+```
