@@ -80,7 +80,7 @@ class SettingMenu extends React.Component<Props, State> {
 
                 <Menu.Item key="chpwd">
                     <Icon type="edit" />
-                    修改信息
+                    修改密码
                 </Menu.Item>
             </Menu>
         )

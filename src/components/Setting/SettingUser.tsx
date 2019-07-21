@@ -10,16 +10,27 @@ interface State {
     loading: boolean
     radioValue: string
     groups: any[]
+    checked: boolean
+    disabled: boolean
+}
+interface Data {
+    groupID: number
 }
 class SettingUser extends React.Component<Props & FormComponentProps, State> {
     public state: State
+    public data: Data
     constructor(props: Props & FormComponentProps) {
         super(props)
         this.state = {
             loading: false,
             radioValue: 'new',
             groups: [],
-            token: ''
+            token: '',
+            checked: false,
+            disabled: false
+        }
+        this.data = {
+            groupID: 0
         }
     }
 
@@ -54,6 +65,7 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
     }
 
     private submitSetting(values: any) {
+        console.log(values)
         let defaultParams = {
             username: values.username,
             passwd: values.passwd,
@@ -112,9 +124,20 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
         })
     }
     private radioChange = (e: any) => {
-        this.setState({
-            radioValue: e.target.value
-        })
+        if (e.target.value === 'new') {
+            this.setState({
+                checked: false,
+                disabled: false,
+                radioValue: e.target.value
+            })
+        } else {
+            this.data.groupID = 1
+            this.setState({
+                checked: true,
+                disabled: true,
+                radioValue: e.target.value
+            })
+        }
     }
 
     render() {
@@ -229,14 +252,22 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                     ) : (
                             <Form.Item {...formTailLayout}>
                                 {getFieldDecorator('groupId', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请选择一个分组'
-                                        }
-                                    ]
+                                    initialValue: this.data.groupID
                                 })(
-                                    <Select placeholder="请选择一个分组">
+                                    <Select onChange={(id: any, e: any) => {
+                                        this.data.groupID = id
+                                        if (id == 1) {
+                                            this.setState({
+                                                checked: true,
+                                                disabled: true
+                                            })
+                                        } else {
+                                            this.setState({
+                                                disabled: false
+                                            })
+                                        }
+                                    }}
+                                        placeholder="请选择一个分组">
                                         {groups.map((value: any) => {
                                             return (
                                                 <Select.Option
@@ -252,7 +283,29 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                             </Form.Item>
                         )}
                     <Form.Item {...formTailLayout}>
-                        {getFieldDecorator('root')(<Checkbox>管理员</Checkbox>)}
+                        {getFieldDecorator('root', {
+                            initialValue: this.state.checked
+                        })(
+                            <Checkbox
+                                disabled={this.state.disabled}
+                                onChange={() => {
+                                    if (this.data.groupID == 1) {
+                                        this.setState({
+                                            disabled: true,
+                                            checked: true
+                                        })
+                                    } else {
+                                        this.setState({
+                                            disabled: false,
+                                            checked: !this.state.checked
+                                        })
+                                    }
+                                }}
+                                checked={this.state.checked}
+                            >
+                                管理员
+                                </Checkbox>
+                        )}
                     </Form.Item>
                     <Form.Item {...formTailLayout}>
                         <Button

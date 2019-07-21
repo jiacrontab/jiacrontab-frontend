@@ -212,7 +212,7 @@ class Home extends React.Component<Props, State> {
                                                     pathname: 'node/detail',
                                                     search: `?&addr=${
                                                         item.sourceName
-                                                    }`
+                                                        }`
                                                 })
                                             }
                                         >
@@ -404,9 +404,9 @@ class Home extends React.Component<Props, State> {
                                         </span>
                                     </p>
                                     <p>
-                                        <span>定时任务失败数量 :</span>
+                                        <span>节点数量 :</span>
                                         <span className="stat-num">
-                                            {userStat.CrontabJobFailNum}
+                                            {userStat.NodeNum}
                                         </span>
                                     </p>
                                     <p>
@@ -470,42 +470,42 @@ class Home extends React.Component<Props, State> {
                             this.state.loadingMore ? (
                                 <div style={{ height: 30 }} />
                             ) : (
-                                <Empty />
-                            )
+                                    <Empty />
+                                )
                         ) : (
-                            <List
-                                itemLayout="horizontal"
-                                loading={this.state.loading}
-                                loadMore={loadMore}
-                                dataSource={data}
-                                renderItem={(item: any) => (
-                                    <List.Item
-                                        key={item.ID}
-                                        actions={[
-                                            <span
-                                                style={{
-                                                    marginRight: '20px',
-                                                    color: '#1890ff'
-                                                }}
-                                                onClick={() => {
-                                                    this.detail(item)
-                                                }}
-                                            >
-                                                详情
-                                            </span>
-                                        ]}
-                                    >
-                                        <List.Item.Meta
+                                <List
+                                    itemLayout="horizontal"
+                                    loading={this.state.loading}
+                                    loadMore={loadMore}
+                                    dataSource={data}
+                                    renderItem={(item: any) => (
+                                        <List.Item
                                             key={item.ID}
-                                            title={this.activityDesc(item)}
-                                            description={time.UTCToTime(
-                                                item.CreatedAt
-                                            )}
-                                        />
-                                    </List.Item>
-                                )}
-                            />
-                        )}
+                                            actions={[
+                                                <span
+                                                    style={{
+                                                        marginRight: '20px',
+                                                        color: '#1890ff'
+                                                    }}
+                                                    onClick={() => {
+                                                        this.detail(item)
+                                                    }}
+                                                >
+                                                    详情
+                                            </span>
+                                            ]}
+                                        >
+                                            <List.Item.Meta
+                                                key={item.ID}
+                                                title={this.activityDesc(item)}
+                                                description={time.UTCToTime(
+                                                    item.CreatedAt
+                                                )}
+                                            />
+                                        </List.Item>
+                                    )}
+                                />
+                            )}
                         <Skeleton
                             title={false}
                             loading={this.state.loadingMore}

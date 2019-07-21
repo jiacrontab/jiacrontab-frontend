@@ -23,7 +23,7 @@ interface Data {
 class EditUserGroupForm extends React.Component<
     Props & FormComponentProps,
     State
-> {
+    > {
     public state: State
     public data: Data
     constructor(props: Props & FormComponentProps) {
@@ -38,7 +38,7 @@ class EditUserGroupForm extends React.Component<
         }
     }
 
-    componentDidMount() {}
+    componentDidMount() { }
     private handleCancel = () => {
         this.props.changeVisible(false)
         this.props.form.resetFields()
@@ -96,41 +96,41 @@ class EditUserGroupForm extends React.Component<
                                 })(<Input placeholder="请输入分组名称" />)}
                             </Form.Item>
                         ) : (
-                            <Form.Item>
-                                {getFieldDecorator('groupId', {
-                                    initialValue: this.data.groupID
-                                })(
-                                    <Select
-                                        onChange={(id: any, e: any) => {
-                                            this.data.groupID = id
-                                            if (id == 1) {
-                                                this.setState({
-                                                    checked: true,
-                                                    disabled: true
-                                                })
-                                            } else {
-                                                this.setState({
-                                                    disabled: false
-                                                })
-                                            }
-                                        }}
-                                    >
-                                        {this.props.groups.map(
-                                            (value: any, index: number) => {
-                                                return (
-                                                    <Select.Option
-                                                        key={value['ID']}
-                                                        value={value['ID']}
-                                                    >
-                                                        {value['name']}
-                                                    </Select.Option>
-                                                )
-                                            }
-                                        )}
-                                    </Select>
-                                )}
-                            </Form.Item>
-                        )}
+                                <Form.Item>
+                                    {getFieldDecorator('groupId', {
+                                        initialValue: this.data.groupID
+                                    })(
+                                        <Select
+                                            onChange={(id: any, e: any) => {
+                                                this.data.groupID = id
+                                                if (id == 1) {
+                                                    this.setState({
+                                                        checked: true,
+                                                        disabled: true
+                                                    })
+                                                } else {
+                                                    this.setState({
+                                                        disabled: false
+                                                    })
+                                                }
+                                            }}
+                                        >
+                                            {this.props.groups.map(
+                                                (value: any, index: number) => {
+                                                    return (
+                                                        <Select.Option
+                                                            key={value['ID']}
+                                                            value={value['ID']}
+                                                        >
+                                                            {value['name']}
+                                                        </Select.Option>
+                                                    )
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            )}
                         <Form.Item>
                             {getFieldDecorator('root', {
                                 initialValue: true
@@ -163,4 +163,5 @@ class EditUserGroupForm extends React.Component<
     }
 }
 
-export default Form.create({})(EditUserGroupForm)
+// export default Form.create({})(EditUserGroupForm)
+export default Form.create<FormComponentProps & ModalProps & Props>()(EditUserGroupForm)

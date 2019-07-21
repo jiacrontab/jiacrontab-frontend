@@ -141,6 +141,7 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                                     />
                                 }
                                 placeholder="请输入用户名"
+                                disabled
                             />
                         )}
                     </Form.Item>

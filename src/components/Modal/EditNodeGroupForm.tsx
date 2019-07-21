@@ -12,13 +12,16 @@ interface Props extends ModalProps {
     groups: any[]
     changeVisible: any
 }
+interface UserFormProps extends FormComponentProps {
+
+}
 interface State {
     radioValue: string
 }
 class EditNodeGroupForm extends React.Component<
-    Props & FormComponentProps,
+    Props & UserFormProps,
     State
-> {
+    > {
     public state: State
     constructor(props: Props & FormComponentProps) {
         super(props)
@@ -27,7 +30,7 @@ class EditNodeGroupForm extends React.Component<
         }
     }
 
-    componentDidMount() {}
+    componentDidMount() { }
     private handleCancel = () => {
         this.props.changeVisible(false)
         this.props.form.resetFields()
@@ -74,27 +77,27 @@ class EditNodeGroupForm extends React.Component<
                                 })(<Input placeholder="请输入分组名称" />)}
                             </Form.Item>
                         ) : (
-                            <Form.Item>
-                                {getFieldDecorator('groupId', {
-                                    initialValue: 1
-                                })(
-                                    <Select>
-                                        {this.props.groups.map(
-                                            (value: any, index: number) => {
-                                                return (
-                                                    <Select.Option
-                                                        key={value['ID']}
-                                                        value={value['ID']}
-                                                    >
-                                                        {value['name']}
-                                                    </Select.Option>
-                                                )
-                                            }
-                                        )}
-                                    </Select>
-                                )}
-                            </Form.Item>
-                        )}
+                                <Form.Item>
+                                    {getFieldDecorator('groupId', {
+                                        initialValue: 1
+                                    })(
+                                        <Select>
+                                            {this.props.groups.map(
+                                                (value: any, index: number) => {
+                                                    return (
+                                                        <Select.Option
+                                                            key={value['ID']}
+                                                            value={value['ID']}
+                                                        >
+                                                            {value['name']}
+                                                        </Select.Option>
+                                                    )
+                                                }
+                                            )}
+                                        </Select>
+                                    )}
+                                </Form.Item>
+                            )}
                     </Form>
                 </Modal>
             </div>
@@ -102,4 +105,5 @@ class EditNodeGroupForm extends React.Component<
     }
 }
 
-export default Form.create({})(EditNodeGroupForm)
+// export default Form.create({})(EditNodeGroupForm)
+export default Form.create<UserFormProps & ModalProps & Props>()(EditNodeGroupForm)
