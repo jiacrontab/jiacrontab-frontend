@@ -88,7 +88,7 @@ class CrontabJobList extends React.Component<JobInfo> {
             pathname: '/edit/crontab_job',
             search: `?id=${params.id}&addr=${params.addr}&tabKey=${
                 params.tabKey
-            }`
+                }`
         }
         this.props.history.push(path)
     }
@@ -103,7 +103,7 @@ class CrontabJobList extends React.Component<JobInfo> {
             pathname: '/log',
             search: `?id=${params.id}&addr=${params.addr}&tabKey=${
                 params.tabKey
-            }&date=${params.date}`
+                }&date=${params.date}`
         }
         this.props.history.push(path)
     }
@@ -209,7 +209,7 @@ class CrontabJobList extends React.Component<JobInfo> {
             pathname: '/edit/crontab_job',
             search: `?id=${params.id}&addr=${params.addr}&tabKey=${
                 params.tabKey
-            }`
+                }`
         }
 
         if (type == 'editor') {
@@ -543,9 +543,12 @@ class CrontabJobList extends React.Component<JobInfo> {
                 )
             },
             {
-                title: '创建人',
-                dataIndex: 'createdUsername',
-                key: 'createdUsername'
+                title: '运行时间',
+                dataIndex: 'lastCostTime',
+                key: 'lastCostTime',
+                render: (record: string) => (
+                    <span>{record + 's'}</span>
+                )
             },
             {
                 title: '最近更新',
@@ -560,29 +563,29 @@ class CrontabJobList extends React.Component<JobInfo> {
                     return record.createdUserId !== this.data.userInfo.userID &&
                         !this.data.userInfo.root &&
                         this.data.userInfo.groupID !== 1 ? (
-                        <span>--</span>
-                    ) : (
-                        <React.Fragment>
-                            {this.getTypeButton(record)}
-                            {(() => {
-                                return (
-                                    <Popover
-                                        placement="bottomRight"
-                                        content={this.downMenu(record)}
-                                        trigger="hover"
-                                    >
-                                        <Button size="small">
-                                            更多
+                            <span>--</span>
+                        ) : (
+                            <React.Fragment>
+                                {this.getTypeButton(record)}
+                                {(() => {
+                                    return (
+                                        <Popover
+                                            placement="bottomRight"
+                                            content={this.downMenu(record)}
+                                            trigger="hover"
+                                        >
+                                            <Button size="small">
+                                                更多
                                             <Icon
-                                                type="down"
-                                                style={{ fontSize: 12 }}
-                                            />
-                                        </Button>
-                                    </Popover>
-                                )
-                            })()}
-                        </React.Fragment>
-                    )
+                                                    type="down"
+                                                    style={{ fontSize: 12 }}
+                                                />
+                                            </Button>
+                                        </Popover>
+                                    )
+                                })()}
+                            </React.Fragment>
+                        )
                 }
             }
         ]
@@ -607,7 +610,7 @@ class CrontabJobList extends React.Component<JobInfo> {
         return (
             <div
                 className="crontab-job-page"
-                // style={{ height: 'calc(100% - 60px)', overflowY: 'auto' }}
+            // style={{ height: 'calc(100% - 60px)', overflowY: 'auto' }}
             >
                 <div className="table-btn">
                     <Search
@@ -664,19 +667,19 @@ class CrontabJobList extends React.Component<JobInfo> {
                         删除
                     </Button>
                     {this.data.userInfo.groupID === 1 ||
-                    this.data.userInfo.root ? (
-                        <Button
-                            href="javascript:;"
-                            type="primary"
-                            htmlType="button"
-                            onClick={this.audit}
-                            disabled={!hasSelected}
-                            className="audit-button"
-                            style={{ float: 'right', marginRight: 10 }}
-                        >
-                            审核
+                        this.data.userInfo.root ? (
+                            <Button
+                                href="javascript:;"
+                                type="primary"
+                                htmlType="button"
+                                onClick={this.audit}
+                                disabled={!hasSelected}
+                                className="audit-button"
+                                style={{ float: 'right', marginRight: 10 }}
+                            >
+                                审核
                         </Button>
-                    ) : null}
+                        ) : null}
                 </div>
                 <Table
                     style={{
@@ -710,7 +713,7 @@ class CrontabJobList extends React.Component<JobInfo> {
                     dataSource={runData}
                     columns={runColumns}
                     rowSelection={rowSelection}
-                    // scroll={{ y: '5000px' }}
+                // scroll={{ y: '5000px' }}
                 />
                 <ModalTemple
                     visible={this.state.execModalVisible}

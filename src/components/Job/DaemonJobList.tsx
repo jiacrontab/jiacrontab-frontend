@@ -75,7 +75,7 @@ class DaemonJobList extends React.Component<JobInfo> {
             pathname: '/edit/daemon_job',
             search: `?id=${params.id}&addr=${params.addr}&tabKey=${
                 params.tabKey
-            }`
+                }`
         }
         this.props.history.push(path)
     }
@@ -90,7 +90,7 @@ class DaemonJobList extends React.Component<JobInfo> {
             pathname: '/log',
             search: `?id=${params.id}&addr=${params.addr}&tabKey=${
                 params.tabKey
-            }&date=${params.date}`
+                }&date=${params.date}`
         }
         this.props.history.push(path)
     }
@@ -144,7 +144,7 @@ class DaemonJobList extends React.Component<JobInfo> {
             pathname: '/edit/daemon_job',
             search: `?id=${params.id}&addr=${params.addr}&tabKey=${
                 params.tabKey
-            }`
+                }`
         }
 
         if (type == 'editor') {
@@ -357,12 +357,6 @@ class DaemonJobList extends React.Component<JobInfo> {
                 }
             },
             {
-                title: '创建人',
-                dataIndex: 'createdUsername',
-                key: 'createdUsername'
-                // width: 150
-            },
-            {
                 title: '最近更新',
                 dataIndex: 'updatedUsername',
                 key: 'updatedUsername'
@@ -394,29 +388,29 @@ class DaemonJobList extends React.Component<JobInfo> {
                     return record.createdUserId !== userInfo.userID &&
                         !userInfo.root &&
                         userInfo.groupID !== 1 ? (
-                        <span>--</span>
-                    ) : (
-                        <React.Fragment>
-                            {this.getTypeButton(record)}
-                            {(() => {
-                                return (
-                                    <Popover
-                                        placement="bottomRight"
-                                        content={this.downMenu(record)}
-                                        trigger="hover"
-                                    >
-                                        <Button size="small">
-                                            更多
+                            <span>--</span>
+                        ) : (
+                            <React.Fragment>
+                                {this.getTypeButton(record)}
+                                {(() => {
+                                    return (
+                                        <Popover
+                                            placement="bottomRight"
+                                            content={this.downMenu(record)}
+                                            trigger="hover"
+                                        >
+                                            <Button size="small">
+                                                更多
                                             <Icon
-                                                type="down"
-                                                style={{ fontSize: 12 }}
-                                            />
-                                        </Button>
-                                    </Popover>
-                                )
-                            })()}
-                        </React.Fragment>
-                    )
+                                                    type="down"
+                                                    style={{ fontSize: 12 }}
+                                                />
+                                            </Button>
+                                        </Popover>
+                                    )
+                                })()}
+                            </React.Fragment>
+                        )
                 }
             }
         ]
@@ -441,7 +435,7 @@ class DaemonJobList extends React.Component<JobInfo> {
             <div className="daemon-job-page">
                 <div
                     className="table-btn"
-                    // style={{ height: 'calc(100% - 60px)', overflowY: 'auto' }}
+                // style={{ height: 'calc(100% - 60px)', overflowY: 'auto' }}
                 >
                     <Search
                         placeholder="任务名"
