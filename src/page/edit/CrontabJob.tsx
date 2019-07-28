@@ -41,13 +41,13 @@ class Add extends React.Component<EditProps> {
         timeArgs: any
         dependJobs: any
     } = {
-        mailTo: [],
-        APITo: [],
-        workEnv: [],
-        command: [],
-        timeArgs: {},
-        dependJobs: []
-    }
+            mailTo: [],
+            APITo: [],
+            workEnv: [],
+            command: [],
+            timeArgs: {},
+            dependJobs: []
+        }
 
     public state = {
         token: '',
@@ -234,7 +234,7 @@ class Add extends React.Component<EditProps> {
                             pathname: '/node/detail',
                             search: `?id=${params.id}&addr=${
                                 params.addr
-                            }&tabKey=${params.tabKey}`
+                                }&tabKey=${params.tabKey}`
                         }
                         this.props.history.push(path)
                     }
@@ -518,10 +518,10 @@ class Add extends React.Component<EditProps> {
                                         (defaultFormValus.killChildProcess ===
                                             true &&
                                             'true') ||
-                                            (defaultFormValus.killChildProcess ===
-                                                false &&
-                                                'false') ||
-                                            'true'
+                                        (defaultFormValus.killChildProcess ===
+                                            false &&
+                                            'false') ||
+                                        'true'
                                     ]
                                 })(
                                     <Checkbox.Group>
@@ -750,7 +750,7 @@ class Add extends React.Component<EditProps> {
                                                         {
                                                             initialValue:
                                                                 relyAddrData[
-                                                                    index
+                                                                index
                                                                 ],
                                                             rules: [
                                                                 {
@@ -768,18 +768,18 @@ class Add extends React.Component<EditProps> {
                                                                         <Option
                                                                             key={
                                                                                 item[
-                                                                                    'ID'
+                                                                                'ID'
                                                                                 ]
                                                                             }
                                                                             value={
                                                                                 item[
-                                                                                    'addr'
+                                                                                'addr'
                                                                                 ]
                                                                             }
                                                                         >
                                                                             {
                                                                                 item[
-                                                                                    'addr'
+                                                                                'addr'
                                                                                 ]
                                                                             }
                                                                         </Option>
@@ -805,7 +805,7 @@ class Add extends React.Component<EditProps> {
                                                         {
                                                             initialValue:
                                                                 relyCommandData[
-                                                                    index
+                                                                index
                                                                 ],
                                                             rules: [
                                                                 {
@@ -821,7 +821,7 @@ class Add extends React.Component<EditProps> {
                                                 </Form.Item>
                                             </Col>
                                             <Col
-                                                span={4}
+                                                span={6}
                                                 style={{ marginLeft: 10 }}
                                             >
                                                 <Form.Item
@@ -835,11 +835,10 @@ class Add extends React.Component<EditProps> {
                                                         {
                                                             initialValue:
                                                                 relyCodeData[
-                                                                    index
+                                                                index
                                                                 ],
                                                             rules: [
                                                                 {
-                                                                    required: true,
                                                                     message:
                                                                         '请输入代码'
                                                                 }
@@ -865,8 +864,8 @@ class Add extends React.Component<EditProps> {
                                                         {
                                                             initialValue:
                                                                 relyTimeout[
-                                                                    index
-                                                                ],
+                                                                index
+                                                                ] || 0,
                                                             rules: [
                                                                 {
                                                                     required: true,
@@ -877,7 +876,7 @@ class Add extends React.Component<EditProps> {
                                                         }
                                                     )(
                                                         <InputNumber
-                                                            min={1}
+                                                            min={0}
                                                             placeholder="超时(s)"
                                                             style={{
                                                                 marginRight: 8
@@ -927,10 +926,10 @@ class Add extends React.Component<EditProps> {
                                     initialValue: [
                                         (defaultFormValus.errorMailNotify &&
                                             'errorMailNotify') ||
-                                            '',
+                                        '',
                                         (defaultFormValus.errorAPINotify &&
                                             'errorAPINotify') ||
-                                            ''
+                                        ''
                                     ]
                                 })(
                                     <Checkbox.Group>
@@ -952,10 +951,10 @@ class Add extends React.Component<EditProps> {
                                     {(() => {
                                         if (
                                             defaultFormValus.status ===
-                                                Status.StatusJobUnaudited &&
+                                            Status.StatusJobUnaudited &&
                                             (this.state.userInfo.root ||
                                                 this.state.userInfo.groupID ===
-                                                    1)
+                                                1)
                                         ) {
                                             return '审核通过'
                                         } else {
