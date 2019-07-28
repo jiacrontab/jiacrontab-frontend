@@ -3,6 +3,7 @@ import { Form, Input, Button, Icon, Modal } from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
+import { hashHistory } from '../../utils/history'
 
 
 interface Props { }
@@ -62,9 +63,9 @@ class EditorUserInfo extends React.Component<Props & FormComponentProps, State> 
                     content: '修改成功',
                     onOk: () => {
                         this.props.form.resetFields()
-                        // localStorage.removeItem('jiaToken')
-                        // localStorage.removeItem('userInfo')
-                        // hashHistory.push('/login')
+                        localStorage.removeItem('jiaToken')
+                        localStorage.removeItem('userInfo')
+                        hashHistory.push('/login')
                     }
                 })
             },
