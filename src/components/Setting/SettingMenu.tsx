@@ -35,8 +35,8 @@ class SettingMenu extends React.Component<Props, State> {
         if (hashHistory.location.pathname == '/setting/user') {
             selectText = 'user'
         }
-        if (hashHistory.location.pathname == '/setting/chpwd') {
-            selectText = 'chpwd'
+        if (hashHistory.location.pathname == '/setting/info') {
+            selectText = 'info'
         }
         this.setState({
             defaultSelect: selectText
@@ -51,9 +51,9 @@ class SettingMenu extends React.Component<Props, State> {
             if (hashHistory.location.pathname == '/setting/user') return
             hashHistory.push('/setting/user')
         }
-        if (item.key === 'chpwd') {
-            if (hashHistory.location.pathname == '/setting/chpwd') return
-            hashHistory.push('/setting/chpwd')
+        if (item.key === 'info') {
+            if (hashHistory.location.pathname == '/setting/info') return
+            hashHistory.push('/setting/info')
         }
     }
     public render(): any {
@@ -78,9 +78,9 @@ class SettingMenu extends React.Component<Props, State> {
                         </Menu.Item>
                 ) : null}
 
-                <Menu.Item key="chpwd">
+                <Menu.Item key="info">
                     <Icon type="edit" />
-                    修改密码
+                    修改信息
                 </Menu.Item>
             </Menu>
         )

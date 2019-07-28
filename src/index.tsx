@@ -16,7 +16,7 @@ import NodeList from './page/node/List'
 import GroupList from './page/group/List'
 import SettingMail from './page/setting/SettingMail'
 import SettingUser from './page/setting/SettingUser'
-import SettingChpwd from './page/setting/SettingChpwd'
+import SettingInfo from './page/setting/SettingInfo'
 
 import NodeDetail from './page/node/Detail'
 import CrontabJobForm from './page/edit/CrontabJob'
@@ -38,7 +38,7 @@ ReactDOM.render(
                 <Route strict exact path="/group/list" component={GroupList} />
                 <Route path="/setting/mail" component={SettingMail} />
                 <Route path="/setting/user" component={SettingUser} />
-                <Route path="/setting/chpwd" component={SettingChpwd} />
+                <Route path="/setting/info" component={SettingInfo} />
                 <Route path="/node/detail" component={NodeDetail} />
                 <Route path="/edit/crontab_job" component={CrontabJobForm} />
                 <Route path="/edit/daemon_job" component={DaemonJobForm} />

@@ -65,8 +65,8 @@ class HomeLayout extends React.Component<Props, State> {
                 if (hashHistory.location.pathname == '/setting/mail') return
                 hashHistory.push('/setting/mail')
             } else {
-                if (hashHistory.location.pathname == '/setting/chpwd') return
-                hashHistory.push('/setting/chpwd')
+                if (hashHistory.location.pathname == '/setting/info') return
+                hashHistory.push('/setting/info')
             }
 
         }
