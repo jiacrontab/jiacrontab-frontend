@@ -11,7 +11,7 @@ import {
     Icon
 } from 'antd'
 import BaseLayout from '../../layout/BaseLayout'
-import { getUrlParam, getRequest } from '../../utils/utils'
+import { getUrlParam, getRequest, trimEmpty } from '../../utils/utils'
 import API from '../../config/api'
 import Bread from '../../components/Layout/Bread'
 import { FormComponentProps } from 'antd/lib/form'
@@ -99,7 +99,7 @@ class EditDaemon extends React.Component<AddProps> {
             name: values.name,
             code: values.code,
             failRestart: values.failRestart,
-            command: values.command.split(' ')
+            command: trimEmpty(values.command.split(' '))
         }
         if (getUrlParam('id', this.props.history.location.search)) {
             newPrams.jobID = Number(
@@ -107,14 +107,14 @@ class EditDaemon extends React.Component<AddProps> {
             )
         }
         if (values.mailTo !== undefined) {
-            newPrams.mailTo = values.mailTo.split(',')
+            newPrams.mailTo = trimEmpty(values.mailTo.split(','))
         }
         if (values.APITo !== undefined) {
-            newPrams.APITo = values.APITo.split(',')
+            newPrams.APITo = trimEmpty(values.APITo.split(','))
         }
 
         if (values.workEnv !== undefined) {
-            newPrams.workEnv = values.workEnv.split(',')
+            newPrams.workEnv = trimEmpty(values.workEnv.split(','))
         }
 
         newPrams.errorMailNotify = values.taskError.includes('errorMailNotify')
@@ -169,7 +169,7 @@ class EditDaemon extends React.Component<AddProps> {
                             pathname: '/node/detail',
                             search: `?id=${params.id}&addr=${
                                 params.addr
-                            }&tabKey=${params.tabKey}`
+                                }&tabKey=${params.tabKey}`
                         }
                         this.props.history.push(path)
                     }
@@ -364,7 +364,7 @@ class EditDaemon extends React.Component<AddProps> {
                                 {getFieldDecorator('mailTo', {
                                     initialValue:
                                         defaultFormValus.mailTo ||
-                                        this.state.userInfo.mail
+                                            this.state.userInfo.mail
                                             ? defaultFormValus.mailTo.join(' ')
                                             : ''
                                 })(<Input placeholder="请输入邮箱地址" />)}
@@ -400,10 +400,10 @@ class EditDaemon extends React.Component<AddProps> {
                                     {(() => {
                                         if (
                                             defaultFormValus.status ===
-                                                Status.StatusJobUnaudited &&
+                                            Status.StatusJobUnaudited &&
                                             (this.state.userInfo.root ||
                                                 this.state.userInfo.groupID ===
-                                                    1)
+                                                1)
                                         ) {
                                             return '审核通过'
                                         } else {

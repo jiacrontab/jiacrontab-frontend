@@ -14,9 +14,9 @@ interface reqOpts {
     catch?(): any
 }
 export const getRequest = (opt: reqOpts) => {
-    const succ = opt.succ ? opt.succ : (data: object) => {},
-        catchfn = opt.catch ? opt.catch : (e: any) => {},
-        error = opt.error ? opt.error : (data: any) => {},
+    const succ = opt.succ ? opt.succ : (data: object) => { },
+        catchfn = opt.catch ? opt.catch : (e: any) => { },
+        error = opt.error ? opt.error : (data: any) => { },
         defaultConfig = {
             headers: { token: opt.token },
             callback: (response: any) => {
@@ -75,7 +75,7 @@ export const getGroupID = (): number => {
     }
 }
 export const time = {
-    UTCToTime: function(UTCTime: string): string {
+    UTCToTime: function (UTCTime: string): string {
         if (UTCTime === '0001-01-01T00:00:00Z') return '--'
         const date = new Date(UTCTime) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
         const Y = date.getFullYear()
@@ -98,4 +98,7 @@ export const time = {
             format(s)
         )
     }
+}
+export const trimEmpty = (currentArray: any) => {
+    return currentArray.filter((item: any) => item != '')
 }
