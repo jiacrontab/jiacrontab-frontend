@@ -14,7 +14,7 @@ import {
     Radio
 } from 'antd'
 import BaseLayout from '../../layout/BaseLayout'
-import { getUrlParam, getRequest, getGroupID } from '../../utils/utils'
+import { getUrlParam, getRequest, getGroupID, trimEmpty } from '../../utils/utils'
 import API from '../../config/api'
 import Bread from '../../components/Layout/Bread'
 import { FormComponentProps } from 'antd/lib/form'
@@ -138,7 +138,7 @@ class Add extends React.Component<EditProps> {
             addr: values.addr,
             isSync: values.isSync === 'synchrony' ? true : false,
             name: values.name,
-            command: values.command.split(' '),
+            command: trimEmpty(values.command.split(' ')),
             code: values.code,
             maxConcurrent: values.maxConcurrent,
             killChildProcess: values.killChildProcess.includes('false')
@@ -158,14 +158,14 @@ class Add extends React.Component<EditProps> {
             )
         }
         if (values.mailTo !== undefined) {
-            newPrams.mailTo = values.mailTo.split(',')
+            newPrams.mailTo = trimEmpty(values.mailTo.split(','))
         }
         if (values.APITo !== undefined) {
-            newPrams.APITo = values.APITo.split(',')
+            newPrams.APITo = trimEmpty(values.APITo.split(','))
         }
 
         if (values.workEnv !== undefined) {
-            newPrams.workEnv = values.workEnv.split(',')
+            newPrams.workEnv = trimEmpty(values.workEnv.split(','))
         }
 
         newPrams.errorMailNotify = values.taskError.includes('errorMailNotify')
@@ -194,7 +194,7 @@ class Add extends React.Component<EditProps> {
                 newPrams.dependJobs.push({
                     from: values.addr,
                     dest: values.relyAddr[item],
-                    command: values.relyCommand[item].split(' '),
+                    command: trimEmpty(values.relyCommand[item].split(' ')),
                     code: values.relyCode[item],
                     timeout: Number(values.relyTimeOut[item])
                 })
