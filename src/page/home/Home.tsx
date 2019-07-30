@@ -520,27 +520,8 @@ class Home extends React.Component<Props, State> {
                         visible={this.state.visible}
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
-                        bodyStyle={{ maxHeight: '450px', overflowY: 'auto' }}
                     >
-                        {((): any => {
-                            let e = []
-                            for (let i in this.state.content) {
-                                e.push(
-                                    <p key={i}>
-                                        <span
-                                            style={{
-                                                color: 'green',
-                                                paddingRight: '20px'
-                                            }}
-                                        >
-                                            {i}:
-                                        </span>
-                                        {this.state.content[i]}
-                                    </p>
-                                )
-                            }
-                            return e
-                        })()}
+                        <pre>{JSON.stringify(this.state.content, null, 2)}</pre>
                     </Modal>
                 </div>
             </BaseLayout>
