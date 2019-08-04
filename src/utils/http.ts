@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getCookie } from './cookie'
+// import { getCookie } from './cookie'
 let baseUrl = '/'
 
 // if (getCookie('ready') === '') {
