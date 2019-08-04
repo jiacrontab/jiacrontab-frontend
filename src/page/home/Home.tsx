@@ -212,7 +212,7 @@ class Home extends React.Component<Props, State> {
                                                     pathname: 'node/detail',
                                                     search: `?&addr=${
                                                         item.sourceName
-                                                        }`
+                                                    }`
                                                 })
                                             }
                                         >
@@ -376,63 +376,63 @@ class Home extends React.Component<Props, State> {
                             <Col span={6}>
                                 <div className="stat-box">
                                     <p>
-                                        <span>未审核定时任务数量 : </span>
+                                        <span>未审核定时任务 : </span>
                                         <span className="stat-num">
                                             {userStat.CrontabJobAuditNum}
                                         </span>
                                     </p>
                                     <p>
-                                        <span>定时任务失败数量 :</span>
+                                        <span>失败定时任务 :</span>
                                         <span className="stat-num">
                                             {userStat.CrontabJobFailNum}
                                         </span>
                                     </p>
                                     <p>
-                                        <span>未审核常驻任务数量 :</span>
+                                        <span>运行定时任务 :</span>
+                                        <span className="stat-num">
+                                            {userStat.CrontabTaskNum}
+                                        </span>
+                                    </p>
+                                </div>
+                            </Col>
+                            <Col span={6}>
+                                <div className="stat-box">
+                                    <p>
+                                        <span>未审核常驻任务 :</span>
                                         <span className="stat-num">
                                             {userStat.DaemonJobAuditNum}
                                         </span>
                                     </p>
-                                </div>
-                            </Col>
-                            <Col span={6}>
-                                <div className="stat-box">
                                     <p>
-                                        <span>常驻任务运行数量 :</span>
+                                        <span>运行常驻任务 :</span>
                                         <span className="stat-num">
-                                            {userStat.DaemonJobRunningNum}
+                                            {userStat.DaemonTaskNum}
                                         </span>
                                     </p>
                                     <p>
-                                        <span>节点数量 :</span>
+                                        <span>节点 :</span>
                                         <span className="stat-num">
                                             {userStat.NodeNum}
                                         </span>
                                     </p>
-                                    <p>
-                                        <span>cpu核心数 : </span>
-                                        <span className="stat-num">
-                                            {systemInfo['cpu核心数']}
-                                        </span>
-                                    </p>
                                 </div>
                             </Col>
                             <Col span={6}>
                                 <div className="stat-box">
                                     <p>
-                                        <span>goroutine数量 : </span>
+                                        <span>goroutine : </span>
                                         <span className="stat-num">
                                             {systemInfo['goroutine数量']}
                                         </span>
                                     </p>
                                     <p>
-                                        <span>内存占用量 : </span>
+                                        <span>内存占用 : </span>
                                         <span className="stat-num">
                                             {systemInfo['内存占用量']}
                                         </span>
                                     </p>
                                     <p>
-                                        <span>当前内存使用量 :</span>
+                                        <span>当前内存使用 :</span>
                                         <span className="stat-num">
                                             {systemInfo['当前内存使用量']}
                                         </span>
@@ -442,7 +442,13 @@ class Home extends React.Component<Props, State> {
                             <Col span={6}>
                                 <div className="stat-box no-border">
                                     <p>
-                                        <span>服务运行时间 : </span>
+                                        <span>cpu核心 : </span>
+                                        <span className="stat-num">
+                                            {systemInfo['cpu核心数']}
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span>服务运行 : </span>
                                         <span className="stat-num">
                                             {systemInfo['服务运行时间']}
                                         </span>
@@ -470,42 +476,42 @@ class Home extends React.Component<Props, State> {
                             this.state.loadingMore ? (
                                 <div style={{ height: 30 }} />
                             ) : (
-                                    <Empty />
-                                )
+                                <Empty />
+                            )
                         ) : (
-                                <List
-                                    itemLayout="horizontal"
-                                    loading={this.state.loading}
-                                    loadMore={loadMore}
-                                    dataSource={data}
-                                    renderItem={(item: any) => (
-                                        <List.Item
-                                            key={item.ID}
-                                            actions={[
-                                                <span
-                                                    style={{
-                                                        marginRight: '20px',
-                                                        color: '#1890ff'
-                                                    }}
-                                                    onClick={() => {
-                                                        this.detail(item)
-                                                    }}
-                                                >
-                                                    详情
+                            <List
+                                itemLayout="horizontal"
+                                loading={this.state.loading}
+                                loadMore={loadMore}
+                                dataSource={data}
+                                renderItem={(item: any) => (
+                                    <List.Item
+                                        key={item.ID}
+                                        actions={[
+                                            <span
+                                                style={{
+                                                    marginRight: '20px',
+                                                    color: '#1890ff'
+                                                }}
+                                                onClick={() => {
+                                                    this.detail(item)
+                                                }}
+                                            >
+                                                详情
                                             </span>
-                                            ]}
-                                        >
-                                            <List.Item.Meta
-                                                key={item.ID}
-                                                title={this.activityDesc(item)}
-                                                description={time.UTCToTime(
-                                                    item.CreatedAt
-                                                )}
-                                            />
-                                        </List.Item>
-                                    )}
-                                />
-                            )}
+                                        ]}
+                                    >
+                                        <List.Item.Meta
+                                            key={item.ID}
+                                            title={this.activityDesc(item)}
+                                            description={time.UTCToTime(
+                                                item.CreatedAt
+                                            )}
+                                        />
+                                    </List.Item>
+                                )}
+                            />
+                        )}
                         <Skeleton
                             title={false}
                             loading={this.state.loadingMore}

@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { getCookie } from './cookie'
+// import { getCookie } from './cookie'
 let baseUrl = '/'
 
-if (getCookie('ready') === '') {
-    baseUrl = '//api-jiacrontab.iwannay.cn/'
-}
+// if (getCookie('ready') === '') {
+//     baseUrl = '//api-jiacrontab.iwannay.cn/'
+// }
 
 if (process.env.NODE_ENV === 'development') {
     baseUrl = 'http://localhost:3000/'
