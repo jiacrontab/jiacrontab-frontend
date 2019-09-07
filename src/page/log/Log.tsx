@@ -112,7 +112,6 @@ class Log extends React.Component<LogProps, State> {
                     logDatas.logList = []
                 }
                 let resultList = this.state.logList.concat(logDatas.logList)
-
                 this.setState({
                     initLoading: false,
                     pageSize: Number(logDatas.pagesize),
@@ -122,14 +121,14 @@ class Log extends React.Component<LogProps, State> {
                     offset: Number(logDatas.offset)
                 })
                 if (
-                    logDatas.logList.length > 0 &&
+                    resultList.length > 0 &&
                     Number(logDatas.filesize) == Number(logDatas.offset)
                 ) {
                     this.setState({
                         noMoreData: true
                     })
                 }
-                if (logDatas.offset === 0) {
+                if (logDatas.offset === 0 && resultList.length > 0) {
                     this.setState({
                         noMoreData: true
                     })
