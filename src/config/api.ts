@@ -87,6 +87,10 @@ const API = {
         method: 'post',
         url: '/v2/group/list'
     },
+    editGroup: {
+        method: 'post',
+        url: '/v2/group/edit'
+    },
     userStat: {
         method: 'post',
         url: '/v2/user/stat'

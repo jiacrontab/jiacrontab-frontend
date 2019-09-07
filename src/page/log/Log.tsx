@@ -129,6 +129,11 @@ class Log extends React.Component<LogProps, State> {
                         noMoreData: true
                     })
                 }
+                if (logDatas.offset === 0) {
+                    this.setState({
+                        noMoreData: true
+                    })
+                }
             },
             error: () => {
                 this.setState({
@@ -173,7 +178,7 @@ class Log extends React.Component<LogProps, State> {
                 initLoading: true,
                 logList: [],
                 loading: false,
-                offset: 0,
+                offset: !this.state.tempTail ? 0 : -1,
                 noMoreData: false,
                 isTail: this.state.tempTail,
                 searchText: this.state.searchTextTemp,
@@ -185,7 +190,7 @@ class Log extends React.Component<LogProps, State> {
                     addr,
                     this.state.token,
                     this.state.searchDate,
-                    0
+                    this.state.offset
                 )
             }
         )

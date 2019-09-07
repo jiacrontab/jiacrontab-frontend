@@ -3,6 +3,7 @@ import { Table, Button, Input } from 'antd'
 import { time, getRequest } from '../../utils/utils'
 import API from 'src/config/api'
 import EditGroupForm from '../Modal/EditGroupForm'
+import EditGroupName from '../Modal/EditGroupName'
 
 interface Props {
     history: any
@@ -21,7 +22,10 @@ interface State {
     groups: any[]
     nodeListAddr: string
     nodeListName: string
-    users: any[]
+    users: any[],
+    showEditGroupName: boolean,
+    editorName: string,
+    editorGroupId: number
 }
 
 interface Data {
@@ -41,7 +45,10 @@ class GroupList extends React.Component<Props, State> {
             groups: [],
             nodeListAddr: '',
             nodeListName: '',
-            users: []
+            users: [],
+            showEditGroupName: false,
+            editorName: '',
+            editorGroupId: -1
         }
         this.data = {
             token: '',
@@ -84,6 +91,10 @@ class GroupList extends React.Component<Props, State> {
         this.setState({ showEditUserGroupForm: status })
     }
 
+    private groupNameVisible = (status: boolean) => {
+        this.setState({ showEditGroupName: status })
+    }
+
     public settingGroup(record: any) {
         this.setState({
             settingGroupID: record.ID,
@@ -94,6 +105,42 @@ class GroupList extends React.Component<Props, State> {
             this.setState({
                 showEditUserGroupForm: true
             })
+        })
+    }
+    public editorGroupName(record: any) {
+        this.setState({
+            showEditGroupName: true,
+            editorName: record.name,
+            editorGroupId: record.ID
+        })
+    }
+    private saveFormRef = (formRef: any) => {
+        this.formRef = formRef
+    }
+    public handleOk = (e: any) => {
+        e.preventDefault()
+        const form = this.formRef.props.form
+        form.validateFields((err: any, values: any) => {
+            if (!err) {
+                let paramsData = {
+                    groupName: values.groupName,
+                    groupID: this.state.editorGroupId
+                }
+                
+                getRequest({
+                    url: API.editGroup,
+                    token: this.data.token,
+                    data: paramsData,
+                    succ: (data: any) => {
+                        form.resetFields()
+                        this.setState({
+                            showEditGroupName: false
+                        })
+                        this.props.changeLoading(true)
+                        this.props.getGroupList()
+                    }
+                })
+            }
         })
     }
 
@@ -121,19 +168,35 @@ class GroupList extends React.Component<Props, State> {
             {
                 title: '操作',
                 key: 'operation',
-                render: (record: any) => (
-                    <Button
-                        href="javascript:;"
-                        htmlType="button"
-                        size="small"
-                        type="primary"
-                        onClick={() => {
-                            this.settingGroup(record)
-                        }}
-                    >
-                        查看
-                    </Button>
-                )
+                render: (record: any) => {
+                    return (
+                        <React.Fragment>
+                            <Button
+                                href="javascript:;"
+                                htmlType="button"
+                                size="small"
+                                type="primary"
+                                style={{ marginRight: 10 }}
+                                onClick={() => {
+                                    this.settingGroup(record)
+                                }}
+                            >
+                                查看
+                            </Button>
+                            <Button
+                                href="javascript:;"
+                                htmlType="button"
+                                size="small"
+                                type="primary"
+                                onClick={() => {
+                                    this.editorGroupName(record)
+                                }}
+                            >
+                                修改
+                            </Button>
+                        </React.Fragment>
+                    )
+                }
             }
         ]
 
@@ -192,6 +255,15 @@ class GroupList extends React.Component<Props, State> {
                     group={this.state.settingGroupID}
                     users={this.state.users}
                     changeVisible={this.changeVisible}
+                />
+                <EditGroupName
+                    visible={this.state.showEditGroupName}
+                    title="修改分组名称"
+                    defaultName={this.state.editorName}
+                    wrappedComponentRef={this.saveFormRef}
+                    handleOk={this.handleOk}
+                    groups={this.state.groups}
+                    changeVisible={this.groupNameVisible}
                 />
             </div>
         )
