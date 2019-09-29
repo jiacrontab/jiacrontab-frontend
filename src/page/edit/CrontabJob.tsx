@@ -163,6 +163,9 @@ class Add extends React.Component<EditProps> {
         if (values.APITo !== undefined) {
             newPrams.APITo = trimEmpty(values.APITo.split(','))
         }
+        if (values.timeoutTrigger !== undefined) {
+            newPrams.timeoutTrigger = values.timeoutTrigger
+        }
 
         if (values.workEnv !== undefined) {
             newPrams.workEnv = trimEmpty(values.workEnv.split(','))
@@ -497,8 +500,7 @@ class Add extends React.Component<EditProps> {
                             </Form.Item>
                             <Form.Item {...formItemLayout} label="超时触发">
                                 {getFieldDecorator('timeoutTrigger', {
-                                    initialValue:
-                                        defaultFormValus.timeoutTrigger
+                                    initialValue: defaultFormValus.timeoutTrigger ? defaultFormValus.timeoutTrigger : []
                                 })(
                                     <Checkbox.Group>
                                         <Checkbox value="SendEmail">
@@ -507,7 +509,7 @@ class Add extends React.Component<EditProps> {
                                         <Checkbox value="CallApi">
                                             api通知
                                         </Checkbox>
-                                        <Checkbox value="Killed">强杀</Checkbox>
+                                        <Checkbox value="Kill">强杀</Checkbox>
                                     </Checkbox.Group>
                                 )}
                             </Form.Item>
