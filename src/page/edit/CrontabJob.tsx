@@ -497,7 +497,7 @@ class Add extends React.Component<EditProps> {
                                 label={
                                     <span>
                                         IP绑定&nbsp;
-                                        <Tooltip title="允许执行任务的服务器IP，一行一个，支持IP段绑定，不填为不限制，主要应用于弹性伸缩服务器">
+                                        <Tooltip title="允许执行任务的服务器IP，支持IP段绑定，不填为不限制，主要应用于弹性伸缩服务器">
                                             <Icon type="question-circle-o" />
                                         </Tooltip>
                                     </span>
