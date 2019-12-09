@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { Table, Card, Button, Form, Input } from 'antd'
+import { Table, Button, Form, Input, Tabs } from 'antd'
 import BaseLayout from '../../layout/BaseLayout'
 import API from '../../config/api'
 import { getRequest, getGroupID } from '../../utils/utils'
 import './List.css'
 
 const FormItem = Form.Item
+const { TabPane } = Tabs
 const EditableContext = React.createContext('huahua')
 
 const EditableRow = ({ form, index, ...props }: any) => (
@@ -127,6 +128,7 @@ interface Data {
     pageSize: number
     searchTxt: string
     token: string | null
+    status: number
 }
 
 interface State {
@@ -145,6 +147,7 @@ class UserNode extends React.Component<T> {
         page: 1,
         token: '',
         searchTxt: '',
+        status: 0,
         pageSize: 20
     }
 
@@ -160,6 +163,24 @@ class UserNode extends React.Component<T> {
         }
     }
 
+    private tabChange = (activeKey: string) => {
+        this.data.page = 1
+        this.data.pageSize = 20
+        this.setState({
+            loading: true
+        })
+        if (activeKey == '1') {
+            this.data.status = 0
+        }
+        if (activeKey == '2') {
+            this.data.status = 1
+        }
+        if (activeKey == '3') {
+            this.data.status = 2
+        }
+        this.getNodeList(this.data.token)
+    }
+
     private getNodeList = (jiaToken: string | null) => {
         this.setState({
             loading: true
@@ -169,9 +190,10 @@ class UserNode extends React.Component<T> {
             token: jiaToken,
             data: {
                 queryGroupID: getGroupID(),
+                queryStatus: this.data.status,
                 page: this.data.page,
                 pagesize: this.data.pageSize,
-                searchTxt: this.data.searchTxt
+                searchTxt: this.data.searchTxt,
             },
             succ: (data: any) => {
                 let nodes = JSON.parse(data)
@@ -347,12 +369,25 @@ class UserNode extends React.Component<T> {
         return (
             <BaseLayout pages="nodeList">
                 <div className="jia-content">
-                    <Card
-                        size="small"
-                        title="节点列表"
-                        style={{ height: '100%' }}
-                    >
-                        <Search
+                <Tabs
+                defaultActiveKey="1"
+                onChange={this.tabChange}
+                style={{
+                    background: '#fff',
+                        padding: '0 16px'
+                }}
+                >
+
+                    <TabPane tab="全部节点列表" key="1">
+                    </TabPane>
+                    <TabPane tab="活跃节点列表" key="2">
+                    </TabPane>
+                    <TabPane tab="失联节点列表" key="3">
+                    </TabPane>
+
+                    </Tabs>
+                <div className="jia-table">
+                    <Search
                             placeholder="节点名"
                             onSearch={value => {
                                 this.data.searchTxt = value
@@ -396,7 +431,8 @@ class UserNode extends React.Component<T> {
                             dataSource={runData}
                             columns={runColumns}
                         />
-                    </Card>
+
+                    </div>
                 </div>
             </BaseLayout>
         )
