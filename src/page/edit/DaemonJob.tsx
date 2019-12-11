@@ -29,8 +29,9 @@ class EditDaemon extends React.Component<AddProps> {
     private defObj: {
         mailTo: string[]
         APITo: string[]
+        WorkIp: string[]
         command: [[]]
-    } = { mailTo: [], APITo: [], command: [[]] }
+    } = { mailTo: [], APITo: [], WorkIp: [], command: [[]] }
 
     state = {
         token: '',
@@ -111,6 +112,10 @@ class EditDaemon extends React.Component<AddProps> {
         }
         if (values.APITo !== undefined) {
             newPrams.APITo = trimEmpty(values.APITo.split(','))
+        }
+
+        if (values.workIp !== undefined) {
+            newPrams.workIp = trimEmpty(values.workIp.split(','))
         }
 
         if (values.workEnv !== undefined) {
@@ -344,6 +349,26 @@ class EditDaemon extends React.Component<AddProps> {
                                     initialValue: defaultFormValus.workUser
                                 })(<Input placeholder="执行用户" />)}
                             </Form.Item>
+
+                            <Form.Item {...formItemLayout}
+                                label={
+                                    <span>
+                                        IP绑定&nbsp;
+                                        <Tooltip title="允许执行任务的服务器IP，支持IP段绑定，不填为不限制，主要应用于弹性伸缩服务器">
+                                            <Icon type="question-circle-o" />
+                                        </Tooltip>
+                                    </span>
+                                }
+                            >
+                                {getFieldDecorator('workIp', {
+                                    initialValue: defaultFormValus.workIp
+                                        ? defaultFormValus.workIp.join(',')
+                                        : ''
+                                })(
+                                    <Input placeholder="格式为192.168.0.1/24，或者192.168.0.1，多个以逗号分隔，不填为不限制" />
+                                )}
+                            </Form.Item>
+
                             <Form.Item {...formItemLayout} label="失败重启">
                                 {getFieldDecorator('failRestart', {
                                     initialValue: defaultFormValus.failRestart,
