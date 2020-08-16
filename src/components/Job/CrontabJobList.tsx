@@ -546,8 +546,8 @@ class CrontabJobList extends React.Component<JobInfo> {
                 title: '运行时间',
                 dataIndex: 'lastCostTime',
                 key: 'lastCostTime',
-                render: (record: string) => (
-                    <span>{record + 's'}</span>
+                render: (record: number) => (
+                    <span>{record.toFixed(4) + 's'}</span>
                 )
             },
             {
