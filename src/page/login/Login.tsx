@@ -4,35 +4,50 @@ import API from '../../config/api'
 import Canvas from '../../components/Canvas/Canvas'
 import Footers from '../../components/footer'
 import { getRequest } from '../../utils/utils'
+import { FormInstance } from 'antd/lib/form';
 
-import { Form, Button, Input, Checkbox, Icon, Layout } from 'antd'
-import { FormComponentProps } from 'antd/lib/form'
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+
+import { Form } from 'antd';
+// import '@ant-design/compatible/assets/index.css';
+
+import { Button, Input, Checkbox, Layout } from 'antd';
+// import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { getCookie } from 'src/utils/cookie'
 const { Content, Footer } = Layout
 
-interface IUserFormProps extends FormComponentProps {
+interface IUserFormProps {
     age: number
     name: string
     history: any
 }
+interface State {
+    loginForm: any,
+    loading: boolean,
+    formRef: React.RefObject<FormInstance>
+}
 
-const FormItem = Form.Item
 
-class Login extends React.Component<IUserFormProps> {
+
+class Login extends React.Component<IUserFormProps, State> {
+    public state: State
     constructor(props: IUserFormProps) {
         super(props)
+        // const [form] = Form.useForm()
         this.state = {
             loginForm: {
                 password: '',
                 username: ''
             },
-            loading: false
+            loading: false,
+            formRef: React.createRef<FormInstance>()
         }
         this.handleInputChange = this.handleInputChange.bind(this)
         this.submitForm = this.submitForm.bind(this)
     }
 
     public componentDidMount(): void {
+
         if (getCookie('ready') === 'false') {
             this.props.history.push('/init')
             return
@@ -52,51 +67,49 @@ class Login extends React.Component<IUserFormProps> {
         })
     }
 
-    public submitForm(e: any) {
-        e.preventDefault()
-        this.props.form.validateFields((err: any, value: any) => {
-            if (!err) {
-                getRequest({
-                    url: API.LoginConfig,
-                    data: {
-                        ...value
-                    },
-                    succ: (data: any) => {
-                        this.setState(
-                            {
-                                loading: false
-                            },
-                            () => {
-                                //开始跳转
-                                if (window.localStorage) {
-                                    let templeToken = JSON.parse(data)
-                                    localStorage.setItem(
-                                        'jiaToken',
-                                        templeToken.token
-                                    )
-                                    localStorage.setItem('userInfo', data)
-                                }
-                                this.props.history.push('/home')
+    public submitForm() {
+        // e.preventDefault()
+        this.state.formRef.current?.validateFields().then(value => {
+            console.log(value)
+            getRequest({
+                url: API.LoginConfig,
+                data: {
+                    ...value
+                },
+                succ: (data: any) => {
+                    this.setState(
+                        {
+                            loading: false
+                        },
+                        () => {
+                            //开始跳转
+                            if (window.localStorage) {
+                                let templeToken = JSON.parse(data)
+                                localStorage.setItem(
+                                    'jiaToken',
+                                    templeToken.token
+                                )
+                                localStorage.setItem('userInfo', data)
                             }
-                        )
-                    },
-                    error: () => {
-                        this.setState({
-                            loading: false
-                        })
-                    },
-                    catch: () => {
-                        this.setState({
-                            loading: false
-                        })
-                    }
-                })
-            }
+                            this.props.history.push('/home')
+                        }
+                    )
+                },
+                error: () => {
+                    this.setState({
+                        loading: false
+                    })
+                },
+                catch: () => {
+                    this.setState({
+                        loading: false
+                    })
+                }
+            })
         })
     }
 
     public render(): any {
-        const { getFieldDecorator } = this.props.form
         return (
             <div className="login-page">
                 <Canvas />
@@ -104,7 +117,8 @@ class Login extends React.Component<IUserFormProps> {
                     <Layout className="login-panel">
                         <Content>
                             <Form
-                                onSubmit={this.submitForm}
+                                ref={this.state.formRef}
+                                onFinish={this.submitForm}
                                 style={{
                                     background: '#fff',
                                     borderRadius: '4px',
@@ -112,78 +126,65 @@ class Login extends React.Component<IUserFormProps> {
                                     padding: '40px'
                                 }}
                                 className="login-form"
+                                name="loginForm"
+                                initialValues={{ remember: true }}
                             >
                                 <div className="login-header">Jiacrontab</div>
                                 <div className="login-sub">
                                     简单可信赖的任务管理工具
                                 </div>
-                                <FormItem>
-                                    {getFieldDecorator('username', {
-                                        rules: [
-                                            {
-                                                message: '请输入用户名',
-                                                required: true,
-                                                whitespace: true
-                                            }
-                                        ]
-                                    })(
-                                        <Input
-                                            name="username"
-                                            onChange={this.handleInputChange}
-                                            size="large"
-                                            prefix={
-                                                <Icon
-                                                    type="user"
-                                                    style={{
-                                                        color: 'rgba(0,0,0,.25)'
-                                                    }}
-                                                />
-                                            }
-                                            placeholder="请输入用户名"
-                                        />
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    {getFieldDecorator('passwd', {
-                                        rules: [
-                                            {
-                                                message: '请输入密码',
-                                                required: true,
-                                                whitespace: true
-                                            }
-                                        ]
-                                    })(
-                                        <Input
-                                            name="passwd"
-                                            onChange={this.handleInputChange}
-                                            size="large"
-                                            prefix={
-                                                <Icon
-                                                    type="lock"
-                                                    style={{
-                                                        color: 'rgba(0,0,0,.25)'
-                                                    }}
-                                                />
-                                            }
-                                            type="password"
-                                            placeholder="请输入密码"
-                                        />
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    {getFieldDecorator('remember', {
-                                        initialValue: true,
-                                        valuePropName: 'checked'
-                                    })(<Checkbox>记住我</Checkbox>)}
+                                <Form.Item
+                                    name="username"
+                                    rules={[{ required: true, message: '请输入用户名' }]}
+                                >
+                                    <Input
+                                        onChange={this.handleInputChange}
+                                        size="large"
+                                        prefix={
+                                            <UserOutlined
+                                                style={{
+                                                    color: 'rgba(0,0,0,.25)'
+                                                }} />
+                                        }
+                                        placeholder="请输入用户名"
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="passwd"
+                                    rules={[{ required: true, message: '请输入密码' }]}
+
+                                >
+                                    <Input
+                                        onChange={this.handleInputChange}
+                                        size="large"
+                                        prefix={
+                                            <LockOutlined
+                                                style={{
+                                                    color: 'rgba(0,0,0,.25)'
+                                                }} />
+                                        }
+                                        type="password"
+                                        placeholder="请输入密码"
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="remember"
+                                    rules={[{ required: true }]}
+                                    valuePropName="checked"
+                                >
+                                    <Checkbox>记住我</Checkbox>
+                                </Form.Item>
+                                <Form.Item>
                                     <Button
                                         htmlType="submit"
-                                        className="login-form-button ant-btn-primary"
+                                        type="primary"
                                         loading={false}
                                         block
+                                        size='large'
                                     >
                                         登录
                                     </Button>
-                                </FormItem>
+                                </Form.Item>
                             </Form>
                         </Content>
                     </Layout>
@@ -192,8 +193,8 @@ class Login extends React.Component<IUserFormProps> {
                     </Footer>
                 </Layout>
             </div>
-        )
+        );
     }
 }
 
-export default Form.create({})(Login)
+export default Login

@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Table, Button, Popover, Icon, Input } from 'antd'
+import { DownOutlined } from '@ant-design/icons';
+import { Table, Button, Popover, Input } from 'antd';
 import { time, getRequest } from '../../utils/utils'
 import API from '../../config/api'
 import ModalTemple from '../modal'
@@ -340,8 +341,7 @@ class CrontabJobList extends React.Component<JobInfo> {
         const stopEle = (
             <Button
                 size="small"
-                href="javascript:;"
-                type="danger"
+                danger
                 style={{ marginRight: 10 }}
                 onClick={() => {
                     this.stopTask(record)
@@ -352,7 +352,6 @@ class CrontabJobList extends React.Component<JobInfo> {
         )
         const startEle = (
             <Button
-                href="javascript:;"
                 size="small"
                 type="primary"
                 style={{ marginRight: 10 }}
@@ -366,7 +365,6 @@ class CrontabJobList extends React.Component<JobInfo> {
 
         let startEleDisabled = (
             <Button
-                href="javascript:;"
                 size="small"
                 type="primary"
                 htmlType="button"
@@ -576,16 +574,13 @@ class CrontabJobList extends React.Component<JobInfo> {
                                         >
                                             <Button size="small">
                                                 更多
-                                            <Icon
-                                                    type="down"
-                                                    style={{ fontSize: 12 }}
-                                                />
+                                            <DownOutlined style={{ fontSize: 12 }} />
                                             </Button>
                                         </Popover>
-                                    )
+                                    );
                                 })()}
                             </React.Fragment>
-                        )
+                        );
                 }
             }
         ]
@@ -628,7 +623,6 @@ class CrontabJobList extends React.Component<JobInfo> {
                     />
                     <Button
                         type="primary"
-                        href="javascript:;"
                         onClick={this.add}
                         style={{ float: 'right' }}
                     >
@@ -637,7 +631,6 @@ class CrontabJobList extends React.Component<JobInfo> {
                     <Button
                         type="primary"
                         htmlType="button"
-                        href="javascript:;"
                         onClick={this.start}
                         disabled={!hasSelected}
                         style={{ float: 'right', marginRight: 10 }}
@@ -647,7 +640,6 @@ class CrontabJobList extends React.Component<JobInfo> {
                     <Button
                         type="primary"
                         htmlType="button"
-                        href="javascript:;"
                         onClick={this.stop}
                         disabled={!hasSelected}
                         className="stop-button"
@@ -656,7 +648,6 @@ class CrontabJobList extends React.Component<JobInfo> {
                         停止
                     </Button>
                     <Button
-                        href="javascript:;"
                         type="primary"
                         htmlType="button"
                         onClick={this.delete}
@@ -669,7 +660,6 @@ class CrontabJobList extends React.Component<JobInfo> {
                     {this.data.userInfo.groupID === 1 ||
                         this.data.userInfo.root ? (
                             <Button
-                                href="javascript:;"
                                 type="primary"
                                 htmlType="button"
                                 onClick={this.audit}

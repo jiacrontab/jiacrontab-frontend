@@ -261,7 +261,7 @@ class NodeDetail extends React.Component<Props> {
                         onChange={this.tabChange}
                         style={{
                             background: '#fff',
-                            padding: '0 16px'
+                            padding: '0 16px 16px'
                         }}
                     >
                         <TabPane tab="定时任务" key="1">

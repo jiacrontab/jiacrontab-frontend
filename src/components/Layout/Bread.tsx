@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Breadcrumb, Icon } from 'antd'
+// import { Icon } from '@ant-design/icons';
+import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom'
 import './Bread.css'
 
@@ -33,7 +34,8 @@ class Bread extends Component<Props, State> {
             const content = (
                 <Fragment>
                     {v.icon ? (
-                        <Icon type={v.icon} style={{ marginRight: 4 }} />
+                        <div></div>
+                        // <Icon type={v.icon} style={{ marginRight: 4 }} />
                     ) : null}
                     {v.name}
                 </Fragment>
@@ -44,7 +46,7 @@ class Bread extends Component<Props, State> {
                     {paths.length - 1 !== k ? (<Link to={v.route || '#'} > {content}</Link>) : v.name}
                 </Breadcrumb.Item>
             )
-        })
+        });
 
     }
 

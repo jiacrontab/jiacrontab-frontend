@@ -1,7 +1,9 @@
 import * as React from 'react'
-import { Modal, Form, Input, Select, Radio } from 'antd'
+import { Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+// import '@ant-design/compatible/assets/index.css';
+import { Modal, Input, Select, Radio } from 'antd';
 import { ModalProps } from 'antd/lib/modal/Modal'
-import { FormComponentProps } from 'antd/lib/form'
 
 interface Props extends ModalProps {
     visible: boolean
@@ -12,28 +14,30 @@ interface Props extends ModalProps {
     groups: any[]
     changeVisible: any
 }
-interface UserFormProps extends FormComponentProps {
+// interface UserFormProps extends FormComponentProps {
 
-}
+// }
 interface State {
     radioValue: string
+    formRef: React.RefObject<FormInstance>
 }
 class EditNodeGroupForm extends React.Component<
-    Props & UserFormProps,
+    Props,
     State
     > {
     public state: State
-    constructor(props: Props & FormComponentProps) {
+    constructor(props: Props) {
         super(props)
         this.state = {
-            radioValue: 'new'
+            radioValue: 'new',
+            formRef: React.createRef<FormInstance>()
         }
     }
 
     componentDidMount() { }
     private handleCancel = () => {
         this.props.changeVisible(false)
-        this.props.form.resetFields()
+        this.state.formRef.current?.resetFields();
     }
     private radioChange = (e: any) => {
         this.setState({
@@ -41,8 +45,8 @@ class EditNodeGroupForm extends React.Component<
         })
     }
     render() {
-        const { form } = this.props
-        const { getFieldDecorator } = form
+        // const { form } = this.props
+        // const { getFieldDecorator } = form
         return (
             <div>
                 <Modal
@@ -54,33 +58,31 @@ class EditNodeGroupForm extends React.Component<
                     onCancel={this.handleCancel}
                     destroyOnClose={true}
                 >
-                    <Form layout="vertical">
-                        <Form.Item>
-                            {getFieldDecorator('types', {
-                                initialValue: this.state.radioValue
-                            })(
-                                <Radio.Group onChange={this.radioChange}>
-                                    <Radio value="new">新建分组</Radio>
-                                    <Radio value="move">复制到指定分组</Radio>
-                                </Radio.Group>
-                            )}
+                    <Form  
+                        layout="vertical"
+                        ref={this.state.formRef}
+                        initialValues={
+                            { 
+                                types: this.state.radioValue, 
+                                groupId:1
+                            }
+                        }
+                    >
+                        <Form.Item name="types">
+                            <Radio.Group onChange={this.radioChange}>
+                                <Radio value="new">新建分组</Radio>
+                                <Radio value="move">复制到指定分组</Radio>
+                            </Radio.Group>
                         </Form.Item>
                         {this.state.radioValue == 'new' ? (
-                            <Form.Item>
-                                {getFieldDecorator('title', {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: '请输入分组名称'
-                                        }
-                                    ]
-                                })(<Input placeholder="请输入分组名称" />)}
+                            <Form.Item
+                                name="title"
+                                rules={[{ required: true, message: '请输入分组名称' }]}
+                            >
+                                <Input placeholder="请输入分组名称" />)
                             </Form.Item>
                         ) : (
-                                <Form.Item>
-                                    {getFieldDecorator('groupId', {
-                                        initialValue: 1
-                                    })(
+                                <Form.Item name="groupId">
                                         <Select>
                                             {this.props.groups.map(
                                                 (value: any, index: number) => {
@@ -95,7 +97,7 @@ class EditNodeGroupForm extends React.Component<
                                                 }
                                             )}
                                         </Select>
-                                    )}
+                                    
                                 </Form.Item>
                             )}
                     </Form>
@@ -106,4 +108,5 @@ class EditNodeGroupForm extends React.Component<
 }
 
 // export default Form.create({})(EditNodeGroupForm)
-export default Form.create<UserFormProps & ModalProps & Props>()(EditNodeGroupForm)
+export default EditNodeGroupForm
+// export default Form.create<UserFormProps & ModalProps & Props>()(EditNodeGroupForm)

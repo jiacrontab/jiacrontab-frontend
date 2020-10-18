@@ -1,6 +1,10 @@
 import * as React from 'react'
-import { Form, Input, Button, Icon, Radio, Select, Checkbox, Modal } from 'antd'
-import { FormComponentProps } from 'antd/lib/form'
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+// import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Radio, Select, Checkbox, Modal } from 'antd';
+// import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
 
@@ -12,14 +16,15 @@ interface State {
     groups: any[]
     checked: boolean
     disabled: boolean
+    formRef: React.RefObject<FormInstance>
 }
 interface Data {
     groupID: number
 }
-class SettingUser extends React.Component<Props & FormComponentProps, State> {
+class SettingUser extends React.Component<Props, State> {
     public state: State
     public data: Data
-    constructor(props: Props & FormComponentProps) {
+    constructor(props: Props) {
         super(props)
         this.state = {
             loading: false,
@@ -27,7 +32,8 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
             groups: [],
             token: '',
             checked: false,
-            disabled: false
+            disabled: false,
+            formRef: React.createRef<FormInstance>()
         }
         this.data = {
             groupID: 0
@@ -94,7 +100,7 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                     title: '温馨提示',
                     content: '添加成功',
                     onOk: () => {
-                        this.props.form.resetFields()
+                        this.state.formRef.current?.resetFields()
                     }
                 })
             },
@@ -102,7 +108,7 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                 this.setState({
                     loading: false
                 })
-                this.props.form.resetFields()
+                this.state.formRef.current?.resetFields()
             },
             catch: () => {
                 this.setState({
@@ -114,13 +120,13 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
 
     private handleSubmit = (e: any) => {
         e.preventDefault()
-        this.props.form.validateFields((err: any, values: any) => {
-            if (!err) {
-                this.setState({
-                    loading: true
-                })
-                this.submitSetting(values)
-            }
+        this.state.formRef.current?.validateFields().then((values) => {
+            // if (!err) {
+            this.setState({
+                loading: true
+            })
+            this.submitSetting(values)
+            // }
         })
     }
     private radioChange = (e: any) => {
@@ -141,8 +147,8 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
     }
 
     render() {
-        const { form } = this.props
-        const { getFieldDecorator } = form
+        // const { form } = this.props
+        // const { getFieldDecorator } = this.state.form
         const { groups } = this.state
 
         const formItemLayout = {
@@ -158,154 +164,126 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
 
         return (
             <div>
-                <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-                    <Form.Item {...formItemLayout} label="用户名">
-                        {getFieldDecorator('username', {
-                            rules: [
-                                {
-                                    message: '请输入用户名',
-                                    required: true,
-                                    whitespace: true
-                                }
-                            ]
-                        })(
-                            <Input
-                                name="username"
-                                size="large"
-                                prefix={
-                                    <Icon
-                                        type="user"
-                                        style={{ color: 'rgba(0,0,0,.25)' }}
-                                    />
-                                }
-                                placeholder="请输入用户名"
-                            />
-                        )}
+                <Form
+                    onFinish={this.handleSubmit}
+                    style={{ marginTop: 20 }}
+                    ref={this.state.formRef}
+                    initialValues={
+                        {
+                            groupType: this.state.radioValue,
+                            groupId: this.data.groupID,
+                            root: this.state.checked
+                        }
+                    }
+                >
+                    <Form.Item
+                        {...formItemLayout}
+                        label="用户名"
+                        name="username"
+                        rules={[{ required: true, message: '请输入用户名' }]}
+                    >
+                        <Input
+                            // name="username"
+                            size="large"
+                            prefix={
+                                <UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
+                            }
+                            placeholder="请输入用户名"
+                        />
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="密码">
-                        {getFieldDecorator('passwd', {
-                            rules: [
-                                {
-                                    message: '请输入密码',
-                                    required: true,
-                                    whitespace: true
-                                }
-                            ]
-                        })(
-                            <Input
-                                name="passwd"
-                                size="large"
-                                prefix={
-                                    <Icon
-                                        type="lock"
-                                        style={{ color: 'rgba(0,0,0,.25)' }}
-                                    />
-                                }
-                                type="password"
-                                placeholder="请输入密码"
-                            />
-                        )}
+                    <Form.Item {...formItemLayout} label="密码" name="passwd"
+                        rules={[{ required: true, message: '请输入密码' }]}>
+
+                        <Input
+                            // name="passwd"
+                            size="large"
+                            prefix={
+                                <LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
+                            }
+                            type="password"
+                            placeholder="请输入密码"
+                        />
+
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="邮箱">
-                        {getFieldDecorator('mail', {
-                            rules: [
-                                {
-                                    message: '请输入邮箱地址',
-                                    required: true
-                                }
-                            ]
-                        })(
-                            <Input
-                                size="large"
-                                prefix={
-                                    <Icon
-                                        type="mail"
-                                        style={{ color: 'rgba(0,0,0,.25)' }}
-                                    />
-                                }
-                                type="email"
-                                placeholder="请输入邮箱地址"
-                            />
-                        )}
+                    <Form.Item {...formItemLayout} label="邮箱" name="mail"
+                        rules={[{ required: true, message: '请输入邮箱地址' }]}>
+
+                        <Input
+                            size="large"
+                            prefix={
+                                <MailOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
+                            }
+                            type="email"
+                            placeholder="请输入邮箱地址"
+                        />
+
                     </Form.Item>
-                    <Form.Item {...formItemLayout} label="分组">
-                        {getFieldDecorator('groupType', {
-                            initialValue: this.state.radioValue
-                        })(
-                            <Radio.Group onChange={this.radioChange}>
-                                <Radio value="new">新建</Radio>
-                                <Radio value="move">移动到指定分组</Radio>
-                            </Radio.Group>
-                        )}
+                    <Form.Item {...formItemLayout} label="分组" name="groupType">
+
+                        <Radio.Group onChange={this.radioChange}>
+                            <Radio value="new">新建</Radio>
+                            <Radio value="move">移动到指定分组</Radio>
+                        </Radio.Group>
+
                     </Form.Item>
                     {this.state.radioValue == 'new' ? (
-                        <Form.Item {...formTailLayout}>
-                            {getFieldDecorator('groupName', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入分组名称'
-                                    }
-                                ]
-                            })(<Input placeholder="请输入分组名称" />)}
+                        <Form.Item {...formTailLayout} name="groupName"
+                            rules={[{ required: true, message: '请输入分组名称' }]}>
+                            <Input placeholder="请输入分组名称" />
                         </Form.Item>
                     ) : (
-                            <Form.Item {...formTailLayout}>
-                                {getFieldDecorator('groupId', {
-                                    initialValue: this.data.groupID
-                                })(
-                                    <Select onChange={(id: any, e: any) => {
-                                        this.data.groupID = id
-                                        if (id == 1) {
-                                            this.setState({
-                                                checked: true,
-                                                disabled: true
-                                            })
-                                        } else {
-                                            this.setState({
-                                                disabled: false
-                                            })
-                                        }
-                                    }}
-                                        placeholder="请选择一个分组">
-                                        {groups.map((value: any) => {
-                                            return (
-                                                <Select.Option
-                                                    key={value['ID']}
-                                                    value={value['ID']}
-                                                >
-                                                    {value['name']}
-                                                </Select.Option>
-                                            )
-                                        })}
-                                    </Select>
-                                )}
-                            </Form.Item>
-                        )}
-                    <Form.Item {...formTailLayout}>
-                        {getFieldDecorator('root', {
-                            initialValue: this.state.checked
-                        })(
-                            <Checkbox
-                                disabled={this.state.disabled}
-                                onChange={() => {
-                                    if (this.data.groupID == 1) {
+                            <Form.Item {...formTailLayout} name="groupId">
+
+                                <Select onChange={(id: any, e: any) => {
+                                    this.data.groupID = id
+                                    if (id == 1) {
                                         this.setState({
-                                            disabled: true,
-                                            checked: true
+                                            checked: true,
+                                            disabled: true
                                         })
                                     } else {
                                         this.setState({
-                                            disabled: false,
-                                            checked: !this.state.checked
+                                            disabled: false
                                         })
                                     }
                                 }}
-                                checked={this.state.checked}
-                            >
-                                管理员
-                                </Checkbox>
+                                    placeholder="请选择一个分组">
+                                    {groups.map((value: any) => {
+                                        return (
+                                            <Select.Option
+                                                key={value['ID']}
+                                                value={value['ID']}
+                                            >
+                                                {value['name']}
+                                            </Select.Option>
+                                        )
+                                    })}
+                                </Select>
+
+                            </Form.Item>
                         )}
+                    <Form.Item {...formTailLayout} name="root">
+
+                        <Checkbox
+                            disabled={this.state.disabled}
+                            onChange={() => {
+                                if (this.data.groupID == 1) {
+                                    this.setState({
+                                        disabled: true,
+                                        checked: true
+                                    })
+                                } else {
+                                    this.setState({
+                                        disabled: false,
+                                        checked: !this.state.checked
+                                    })
+                                }
+                            }}
+                            checked={this.state.checked}
+                        >
+                            管理员
+                                </Checkbox>
+
                     </Form.Item>
                     <Form.Item {...formTailLayout}>
                         <Button
@@ -319,8 +297,8 @@ class SettingUser extends React.Component<Props & FormComponentProps, State> {
                     </Form.Item>
                 </Form>
             </div>
-        )
+        );
     }
 }
-
-export default Form.create({})(SettingUser)
+export default SettingUser
+// export default Form.create({})(SettingUser)

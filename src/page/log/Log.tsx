@@ -310,7 +310,6 @@ class Log extends React.Component<LogProps, State> {
                         />
                         <Button
                             type="primary"
-                            href="javascript:;"
                             htmlType="button"
                             onClick={this.searchLog}
                         >

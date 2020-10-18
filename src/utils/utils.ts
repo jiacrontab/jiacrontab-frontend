@@ -100,5 +100,6 @@ export const time = {
     }
 }
 export const trimEmpty = (currentArray: any) => {
+    if (!currentArray) return ''
     return currentArray.filter((item: any) => item != '')
 }

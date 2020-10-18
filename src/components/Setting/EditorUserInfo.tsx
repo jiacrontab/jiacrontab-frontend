@@ -1,6 +1,10 @@
 import * as React from 'react'
-import { Form, Input, Button, Icon, Modal } from 'antd'
-import { FormComponentProps } from 'antd/lib/form'
+import { MailOutlined, UserOutlined } from '@ant-design/icons';
+import { Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+// import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Modal } from 'antd';
+// import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
 import { hashHistory } from '../../utils/history'
@@ -12,22 +16,26 @@ interface State {
     loading: boolean
     user: string,
     userID: Number,
-    mail: string
+    mail: string,
+    formRef: React.RefObject<FormInstance>
 }
-class EditorUserInfo extends React.Component<Props & FormComponentProps, State> {
+class EditorUserInfo extends React.Component<Props, State> {
     public state: State
-    constructor(props: Props & FormComponentProps) {
+    constructor(props: Props) {
         super(props)
         this.state = {
             loading: false,
             token: '',
             user: '',
             userID: -1,
-            mail: ''
+            mail: '',
+            formRef: React.createRef<FormInstance>()
         }
+        
     }
 
     componentDidMount() {
+        console.log(this.state.formRef)
         if (window.localStorage) {
             if (localStorage.getItem('userInfo')) {
                 let userInfos: any = localStorage.getItem('userInfo')
@@ -62,7 +70,7 @@ class EditorUserInfo extends React.Component<Props & FormComponentProps, State> 
                     title: '温馨提示',
                     content: '修改成功',
                     onOk: () => {
-                        this.props.form.resetFields()
+                        this.state.formRef.current?.resetFields()
                         localStorage.removeItem('jiaToken')
                         localStorage.removeItem('userInfo')
                         hashHistory.push('/login')
@@ -86,21 +94,20 @@ class EditorUserInfo extends React.Component<Props & FormComponentProps, State> 
 
     private submitInfo = (e: any) => {
         e.preventDefault()
-        this.props.form.validateFields((err: any, values: any) => {
-            if (!err) {
+        this.state.formRef.current?.validateFields().then((values) => {
+            // if (!err) {
                 this.setState({
                     loading: true
                 })
                 console.log(values)
                 this.changeInfo(values)
-            }
+            // }
         })
     }
 
 
     render() {
-        const { form } = this.props
-        const { getFieldDecorator } = form
+        // const { getFieldDecorator } = this.state.form
         let { user, mail } = this.state
 
         const formItemLayout = {
@@ -115,55 +122,43 @@ class EditorUserInfo extends React.Component<Props & FormComponentProps, State> 
         }
 
         return (
-
-            <Form onSubmit={this.submitInfo} style={{ marginTop: 20 }}>
-                <Form.Item {...formItemLayout} label="用户名">
-                    {getFieldDecorator('username', {
-                        initialValue: user,
-                        rules: [
-                            {
-                                message: '请输入用户名',
-                                required: true,
-                                whitespace: true
-                            }
-                        ]
-                    })(
+            <Form 
+                onFinish={this.submitInfo} 
+                ref={this.state.formRef}
+                initialValues={
+                    {
+                        username: user,
+                        mail,
+                    }
+                } 
+                style={{ marginTop: 20 }}
+            >
+                <Form.Item {...formItemLayout} label="用户名" name="username"
+                        rules={[{ required: true, message: '请输入用户名' }]}>
+                    
                         <Input
                             disabled
-                            name="username"
+                            // name="username"
                             size="large"
                             prefix={
-                                <Icon
-                                    type="user"
-                                    style={{ color: 'rgba(0,0,0,.25)' }}
-                                />
+                                <UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
                             }
                             placeholder="请输入用户名"
                         />
-                    )}
+                    
                 </Form.Item>
-                <Form.Item {...formItemLayout} label="邮箱">
-                    {getFieldDecorator('mail', {
-                        initialValue: mail,
-                        rules: [
-                            {
-                                message: '请输入邮箱地址',
-                                whitespace: true
-                            }
-                        ]
-                    })(
+                <Form.Item {...formItemLayout} label="邮箱" name="mail"
+                        rules={[{ required: true, message: '请输入邮箱地址' }]}>
+                    
                         <Input
                             size="large"
                             type="email"
                             prefix={
-                                <Icon
-                                    type="mail"
-                                    style={{ color: 'rgba(0,0,0,.25)' }}
-                                />
+                                <MailOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
                             }
                             placeholder="请输入邮箱地址"
                         />
-                    )}
+                    
                 </Form.Item>
 
                 <Form.Item {...formTailLayout}>
@@ -177,8 +172,8 @@ class EditorUserInfo extends React.Component<Props & FormComponentProps, State> 
                             </Button>
                 </Form.Item>
             </Form>
-        )
+        );
     }
 }
-
-export default Form.create({})(EditorUserInfo)
+export default EditorUserInfo
+// export default Form.create({})(EditorUserInfo)

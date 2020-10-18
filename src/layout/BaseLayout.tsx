@@ -2,7 +2,18 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import Footers from '../components/footer'
 import { hashHistory } from '../utils/history'
-import { Layout, Menu, Icon, Avatar, Dropdown, Modal } from 'antd'
+
+import {
+    BarsOutlined,
+    DownOutlined,
+    HomeOutlined,
+    InfoCircleOutlined,
+    LogoutOutlined,
+    SettingOutlined,
+    SnippetsOutlined,
+} from '@ant-design/icons';
+
+import { Layout, Menu, Avatar, Dropdown, Modal } from 'antd';
 const { Header, Content } = Layout
 
 interface Props {
@@ -90,12 +101,12 @@ class HomeLayout extends React.Component<Props, State> {
         const menu = (
             <Menu onClick={this.menuItemEvent}>
                 <Menu.Item key="setting">
-                    <Icon type="setting" />
+                    <SettingOutlined />
                     应用设置
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Item key="logout">
-                    <Icon type="logout" />
+                    <LogoutOutlined />
                     退出登录
                 </Menu.Item>
             </Menu>
@@ -120,20 +131,20 @@ class HomeLayout extends React.Component<Props, State> {
                     >
                         <Menu.Item key="home">
                             <Link to="/home" replace>
-                                <Icon type="home" />
+                                <HomeOutlined />
                                 <span>首页</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item key="nodeList">
                             <Link to="/node/list" replace>
-                                <Icon type="bars" />
+                                <BarsOutlined />
                                 <span>节点列表</span>
                             </Link>
                         </Menu.Item>
                         {groupID === 1 ? (
                             <Menu.Item key="groupList">
                                 <Link to="/group/list" replace>
-                                    <Icon type="snippets" />
+                                    <SnippetsOutlined />
                                     <span>分组</span>
                                 </Link>
                             </Menu.Item>
@@ -147,7 +158,7 @@ class HomeLayout extends React.Component<Props, State> {
                         </Menu.Item> */}
                         <Menu.Item key="help">
                             <Link to="/help" replace>
-                                <Icon type="info-circle" />
+                                <InfoCircleOutlined />
                                 <span>帮助</span>
                             </Link>
                         </Menu.Item>
@@ -171,7 +182,7 @@ class HomeLayout extends React.Component<Props, State> {
                                         color: '#1890ff'
                                     }}
                                 >
-                                    {this.state.userName} <Icon type="down" />
+                                    {this.state.userName} <DownOutlined />
                                 </span>
                             </div>
                         </Dropdown>
@@ -180,7 +191,7 @@ class HomeLayout extends React.Component<Props, State> {
                 <Content style={{ position: 'relative' }}>{children}</Content>
                 <Footers />
             </Layout>
-        )
+        );
     }
 }
 

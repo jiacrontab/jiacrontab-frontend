@@ -1,7 +1,10 @@
 import * as React from 'react'
-import { Modal, Form, Input } from 'antd'
+import { Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+// import '@ant-design/compatible/assets/index.css';
+import { Modal, Input } from 'antd';
 import { ModalProps } from 'antd/lib/modal/Modal'
-import { FormComponentProps } from 'antd/lib/form'
+// import { FormComponentProps } from '@ant-design/compatible/lib/form';
 
 interface Props extends ModalProps {
     visible: boolean
@@ -13,33 +16,34 @@ interface Props extends ModalProps {
     changeVisible: any,
     defaultName: string
 }
-interface UserFormProps extends FormComponentProps {
+// interface UserFormProps extends FormComponentProps {
 
-}
+// }
 interface State {
     // radioValue: string
+    formRef: React.RefObject<FormInstance>
 }
 class EditGroupName extends React.Component<
-    Props & UserFormProps,
+    Props,
     State
     > {
     public state: State
-    constructor(props: Props & FormComponentProps) {
+    constructor(props: Props) {
         super(props)
         this.state = {
-            // radioValue: 'new'
+            formRef: React.createRef<FormInstance>()
         }
     }
 
     componentDidMount() { }
     private handleCancel = () => {
         this.props.changeVisible(false)
-        this.props.form.resetFields()
+        this.state.formRef.current?.resetFields();
     }
 
     render() {
-        const { form, defaultName } = this.props
-        const { getFieldDecorator } = form
+        const { defaultName } = this.props
+        // const { getFieldDecorator } = form
         return (
             <div>
                 <Modal
@@ -51,17 +55,20 @@ class EditGroupName extends React.Component<
                     onCancel={this.handleCancel}
                     destroyOnClose={true}
                 >
-                    <Form layout="vertical">
-                        <Form.Item>
-                            {getFieldDecorator('groupName', {
-                                initialValue: defaultName,
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入分组名称'
-                                    }
-                                ]
-                            })(<Input placeholder="请输入分组名称" />)}
+                    <Form  
+                        layout="vertical"
+                        ref={this.state.formRef}
+                        initialValues={
+                            { 
+                                groupName: defaultName
+                            }
+                        }
+                    >
+                        <Form.Item
+                                name="groupName"
+                                rules={[{ required: true, message: '请输入分组名称' }]}
+                            >
+                            <Input placeholder="请输入分组名称" />)
                         </Form.Item>
                     </Form>
                 </Modal>
@@ -70,4 +77,6 @@ class EditGroupName extends React.Component<
     }
 }
 
-export default Form.create<UserFormProps & ModalProps & Props>()(EditGroupName)
+export default EditGroupName
+
+// export default Form.create<UserFormProps & ModalProps & Props>()(EditGroupName)

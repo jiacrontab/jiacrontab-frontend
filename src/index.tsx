@@ -22,11 +22,11 @@ import NodeDetail from './page/node/Detail'
 import CrontabJobForm from './page/edit/CrontabJob'
 import DaemonJobForm from './page/edit/DaemonJob'
 import Log from './page/log/Log'
-import { LocaleProvider } from 'antd'
+import { ConfigProvider } from 'antd';
 
 ReactDOM.render(
-    <LocaleProvider locale={zhCN}>
-        <Router history={hashHistory}>
+    <ConfigProvider locale={zhCN} >
+        <Router history={hashHistory} >
             <Switch>
                 <Route path="/" exact={true} component={App} />
                 <Route path="/init" component={Init} />
@@ -45,7 +45,7 @@ ReactDOM.render(
                 <Route path="/log" component={Log} />
             </Switch>
         </Router>
-    </LocaleProvider>,
+    </ConfigProvider>,
     document.getElementById('root') as HTMLElement
 )
 

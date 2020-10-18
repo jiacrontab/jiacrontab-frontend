@@ -273,9 +273,9 @@ class UserList extends React.Component<Props, State> {
             })
         })
     }
-    private saveFormRef = (formRef: any) => {
-        this.formRef = formRef
-    }
+    // private saveFormRef = (formRef: any) => {
+    //     this.formRef = formRef
+    // }
     private tabChange = (activeKey: string) => {
         this.data.page = 1
         this.data.pageSize = 20
@@ -360,7 +360,6 @@ class UserList extends React.Component<Props, State> {
                     return (
                         <React.Fragment>
                             <Button
-                                href="javascript:;"
                                 htmlType="button"
                                 size="small"
                                 type="primary"
@@ -372,10 +371,9 @@ class UserList extends React.Component<Props, State> {
                                 设置
                             </Button>
                             <Button
-                                href="javascript:;"
                                 htmlType="button"
                                 size="small"
-                                type="danger"
+                                danger
                                 onClick={() => {
                                     this.removeUserList(val)
                                 }}
@@ -493,7 +491,6 @@ class UserList extends React.Component<Props, State> {
                 <EditUserGroupForm
                     visible={this.state.showEditUserGroupForm}
                     title="编辑用户分组"
-                    wrappedComponentRef={this.saveFormRef}
                     handleOk={this.handleOk}
                     groups={this.state.groups}
                     changeVisible={this.changeVisible}

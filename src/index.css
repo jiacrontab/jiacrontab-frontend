@@ -18,3 +18,25 @@ body {
 .jia-hide {
     visibility: hidden;
 }
+.tast-timing {
+  color: red;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: right;
+  align-items: center;
+  height: 32px;
+  line-height: 32px;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  position: relative;
+  margin-right: 8px;
+}
+.tast-timing::before {
+  display: inline-block;
+  margin-right: 4px;
+  color: #ff4d4f;
+  font-size: 14px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+  content: '*';
+}

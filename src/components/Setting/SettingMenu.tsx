@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Menu, Icon } from 'antd'
+import { EditOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
 import { hashHistory } from '../../utils/history'
 
 interface Props {
@@ -67,23 +68,23 @@ class SettingMenu extends React.Component<Props, State> {
             >
                 {groupID === 1 && root ? (
                     <Menu.Item key="mail">
-                        <Icon type="mail" />
+                        <MailOutlined />
                         邮箱配置
                         </Menu.Item>
                 ) : null}
                 {groupID === 1 && root ? (
                     <Menu.Item key="user">
-                        <Icon type="user" />
+                        <UserOutlined />
                         添加用户
                         </Menu.Item>
                 ) : null}
 
                 <Menu.Item key="info">
-                    <Icon type="edit" />
+                    <EditOutlined />
                     修改信息
                 </Menu.Item>
             </Menu>
-        )
+        );
     }
 }
 

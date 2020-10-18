@@ -209,7 +209,6 @@ class EditGroupForm extends React.Component<Props, State> {
                 key: 'operation',
                 render: (record: any) => (
                     <Button
-                        href="javascript:;"
                         htmlType="button"
                         size="small"
                         type="primary"

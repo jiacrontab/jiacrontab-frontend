@@ -16,6 +16,16 @@
     background: #ffffff;
 }
 .jia-table {
-    padding: 0 16px;
+    padding: 0 16px 16px;
     background-color: white;
+}
+.table-reset .ant-table-placeholder {
+    position: relative;
+    height: 151px;
+}
+.table-reset .ant-table-placeholder td {
+    position: absolute;
+    width: 100%;
+    right: 0;
+
 }

@@ -71,9 +71,7 @@ class GroupNodeList extends React.Component<Props, State> {
         })
     }
 
-    private saveFormRef = (formRef: any) => {
-        this.formRef = formRef
-    }
+    
     public handleOk = (e: any) => {
         e.preventDefault()
         const form = this.formRef.props.form
@@ -208,7 +206,6 @@ class GroupNodeList extends React.Component<Props, State> {
                     return (
                         <React.Fragment>
                             <Button
-                                href="javascript:;"
                                 htmlType="button"
                                 size="small"
                                 type="primary"
@@ -220,10 +217,9 @@ class GroupNodeList extends React.Component<Props, State> {
                                 设置分组
                             </Button>
                             <Button
-                                href="javascript:;"
                                 htmlType="button"
                                 size="small"
-                                type="danger"
+                                // danger
                                 disabled={!record.disabled}
                                 onClick={() => {
                                     this.removeNode(record)
@@ -293,7 +289,6 @@ class GroupNodeList extends React.Component<Props, State> {
                 <EditNodeGroupForm
                     visible={this.state.showEditUserGroupForm}
                     title="编辑节点分组"
-                    wrappedComponentRef={this.saveFormRef}
                     handleOk={this.handleOk}
                     groups={this.state.groups}
                     changeVisible={this.changeVisible}

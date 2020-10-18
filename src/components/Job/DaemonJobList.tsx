@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Table, Button, Popover, Icon, Input } from 'antd'
+import { DownOutlined } from '@ant-design/icons';
+import { Table, Button, Popover, Input } from 'antd';
 import { time, getRequest } from '../../utils/utils'
 import API from '../../config/api'
 
@@ -239,8 +240,7 @@ class DaemonJobList extends React.Component<JobInfo> {
         const stopEle = (
             <Button
                 size="small"
-                type="danger"
-                href="javascript:;"
+                danger
                 style={{ marginRight: 10 }}
                 onClick={() => {
                     this.stopTask(record)
@@ -252,7 +252,6 @@ class DaemonJobList extends React.Component<JobInfo> {
         const startEle = (
             <Button
                 size="small"
-                href="javascript:;"
                 type="primary"
                 style={{ marginRight: 10 }}
                 onClick={() => {
@@ -266,7 +265,6 @@ class DaemonJobList extends React.Component<JobInfo> {
         const startEleDisabled = (
             <Button
                 size="small"
-                href="javascript:;"
                 type="primary"
                 htmlType="button"
                 style={{ marginRight: 10 }}
@@ -401,16 +399,13 @@ class DaemonJobList extends React.Component<JobInfo> {
                                         >
                                             <Button size="small">
                                                 更多
-                                            <Icon
-                                                    type="down"
-                                                    style={{ fontSize: 12 }}
-                                                />
+                                            <DownOutlined style={{ fontSize: 12 }} />
                                             </Button>
                                         </Popover>
-                                    )
+                                    );
                                 })()}
                             </React.Fragment>
-                        )
+                        );
                 }
             }
         ]
@@ -451,7 +446,6 @@ class DaemonJobList extends React.Component<JobInfo> {
                         style={{ width: 350 }}
                     />
                     <Button
-                        href="javascript:;"
                         type="primary"
                         onClick={this.edit}
                         style={{ float: 'right' }}
@@ -459,7 +453,6 @@ class DaemonJobList extends React.Component<JobInfo> {
                         添加
                     </Button>
                     <Button
-                        href="javascript:;"
                         htmlType="button"
                         type="primary"
                         onClick={this.start}
@@ -469,7 +462,6 @@ class DaemonJobList extends React.Component<JobInfo> {
                         启动
                     </Button>
                     <Button
-                        href="javascript:;"
                         type="primary"
                         onClick={this.stop}
                         htmlType="button"
@@ -480,7 +472,6 @@ class DaemonJobList extends React.Component<JobInfo> {
                         停止
                     </Button>
                     <Button
-                        href="javascript:;"
                         htmlType="button"
                         type="primary"
                         onClick={this.delete}
@@ -492,7 +483,6 @@ class DaemonJobList extends React.Component<JobInfo> {
                     </Button>
                     {userInfo.groupID === 1 || userInfo.root ? (
                         <Button
-                            href="javascript:;"
                             htmlType="button"
                             type="primary"
                             onClick={this.audit}

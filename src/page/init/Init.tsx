@@ -4,27 +4,44 @@ import API from '../../config/api'
 import Footers from '../../components/footer'
 import { getRequest } from '../../utils/utils'
 
-import { Form, Button, Input, Icon, Layout, message } from 'antd'
-import { FormComponentProps } from 'antd/lib/form'
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+
+import { Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+// import '@ant-design/compatible/assets/index.css';
+
+import { Button, Input, Layout, message } from 'antd';
+// import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { setCooket } from 'src/utils/cookie'
 const { Content, Footer } = Layout
 const FormItem = Form.Item
 
-function hasErrors(fieldsError: object) {
-    return Object.keys(fieldsError).some(field => fieldsError[field])
-}
+// function hasErrors(fieldsError: object) {
+//     return Object.keys(fieldsError).some(field => fieldsError[field])
+// }
 interface Props {
     history?: any
 }
-class Init extends React.Component<FormComponentProps & Props> {
-    constructor(props: FormComponentProps) {
+interface State {
+    isMysql: boolean,
+    loading: boolean,
+    formRef: React.RefObject<FormInstance>
+}
+class Init extends React.Component<Props,State> {
+    public state: State
+    constructor(props: Props) {
         super(props)
+        this.state = {
+            isMysql: false,
+            loading: false,
+            formRef: React.createRef<FormInstance>()
+        }
     }
 
-    state = {
-        isMysql: false,
-        loading: false
-    }
+    // state = {
+    //     isMysql: false,
+    //     loading: false
+    // }
 
     public componentDidMount() {
         //driverName dsn
@@ -33,8 +50,8 @@ class Init extends React.Component<FormComponentProps & Props> {
     }
     private handleSubmit = (e: any) => {
         e.preventDefault()
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
+        this.state.formRef.current?.validateFields().then(values => {
+            // if (!err) {
                 this.setState({
                     loading: true
                 })
@@ -66,18 +83,19 @@ class Init extends React.Component<FormComponentProps & Props> {
                         })
                     }
                 })
-            }
+            // }
         })
     }
 
     public render() {
-        const { getFieldDecorator, getFieldsError } = this.props.form
+        // const getFieldsError  = this.state.formRef.current?.getFieldsError()
         return (
             <Layout className="init-page" style={{ minHeight: '100vh' }}>
                 <Content>
                     <div className="login-panel">
                         <Form
-                            onSubmit={this.handleSubmit}
+                            ref={this.state.formRef}
+                            onFinish={this.handleSubmit}
                             style={{
                                 background: '#fff',
                                 borderRadius: '4px',
@@ -85,94 +103,78 @@ class Init extends React.Component<FormComponentProps & Props> {
                                 padding: '20px 40px 40px'
                             }}
                             className="login-form"
+                            // initialValues={{ remember: true }}
                         >
                             <div className="login-header">Jiacrontab</div>
                             <div className="login-sub">
                                 简单可信赖的任务管理工具
                             </div>
-                            <FormItem>
-                                {getFieldDecorator('username', {
-                                    rules: [
-                                        {
-                                            message: '请输入用户名',
-                                            required: true
-                                        }
-                                    ]
-                                })(
-                                    <Input
-                                        name="username"
-                                        prefix={
-                                            <Icon
-                                                type="user"
-                                                style={{
-                                                    color: 'rgba(0,0,0,.25)'
-                                                }}
-                                            />
-                                        }
-                                        placeholder="请输入用户名"
-                                    />
-                                )}
+                            <FormItem
+                                name="username"
+                                rules={[{ required: true, message: '请输入用户名' }]}
+                            >
+                                <Input
+                                    prefix={
+                                        <UserOutlined
+                                            style={{
+                                                color: 'rgba(0,0,0,.25)'
+                                            }} />
+                                    }
+                                    placeholder="请输入用户名"
+                                />
                             </FormItem>
-                            <FormItem>
-                                {getFieldDecorator('passwd', {
-                                    rules: [
-                                        {
-                                            message: '请输入密码',
-                                            required: true
-                                        }
-                                    ]
-                                })(
+                            <FormItem
+                                name="passwd"
+                                rules={[{ required: true, message: '请输入密码' }]}
+
+                            >
+                                
                                     <Input
-                                        name="passwd"
                                         prefix={
-                                            <Icon
-                                                type="lock"
+                                            <LockOutlined
                                                 style={{
                                                     color: 'rgba(0,0,0,.25)'
-                                                }}
-                                            />
+                                                }} />
                                         }
                                         type="password"
                                         placeholder="请输入密码"
                                     />
-                                )}
                             </FormItem>
-                            <FormItem>
-                                {getFieldDecorator('mail', {
-                                    rules: [
-                                        {
-                                            type: 'email',
-                                            message: '请输入正确的邮箱'
-                                        },
-                                        {
-                                            required: true,
-                                            message: '请输入邮箱地址'
-                                        }
-                                    ]
-                                })(
-                                    <Input
-                                        name="mail"
-                                        prefix={
-                                            <Icon
-                                                type="mail"
-                                                style={{
-                                                    color: 'rgba(0,0,0,.25)'
-                                                }}
-                                            />
-                                        }
-                                        type="email"
-                                        placeholder="请输入邮箱"
-                                    />
-                                )}
+                            <FormItem
+                                name="mail"
+                                rules={[
+                                    {
+                                      type: 'email',
+                                      message: '请输入正确的邮箱',
+                                    },
+                                    {
+                                      required: true,
+                                      message: '请输入邮箱地址',
+                                    },
+                                  ]}
+
+                            >
+                                <Input
+                                    // name="mail"
+                                    prefix={
+                                        <MailOutlined
+                                            style={{
+                                                color: 'rgba(0,0,0,.25)'
+                                            }} />
+                                    }
+                                    type="email"
+                                    placeholder="请输入邮箱"
+                                />
                             </FormItem>
 
                             <FormItem>
                                 <Button
                                     htmlType="submit"
-                                    className="login-form-button ant-btn-primary"
+                                    type="primary"
+                                    loading={false}
                                     block
-                                    loading={this.state.loading}
-                                    disabled={hasErrors(getFieldsError())}
+                                    size='large'
+                                    // disabled={hasErrors(getFieldsError}
                                 >
                                     初始化应用
                                 </Button>
@@ -184,8 +186,8 @@ class Init extends React.Component<FormComponentProps & Props> {
                     <Footers />
                 </Footer>
             </Layout>
-        )
+        );
     }
 }
 
-export default Form.create({})(Init)
+export default Init

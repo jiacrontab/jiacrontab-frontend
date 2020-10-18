@@ -32,11 +32,11 @@
     },
     "proxy": {
         "/v1": {
-            "target": "http://localhost:20000",
+            "target": "https://jiacrontab-spa.iwannay.cn",
             "changeOrigin": true
         },
         "/v2": {
-            "target": "http://localhost:20000",
+            "target": "https://jiacrontab-spa.iwannay.cn",
             "changeOrigin": true
         }
     }

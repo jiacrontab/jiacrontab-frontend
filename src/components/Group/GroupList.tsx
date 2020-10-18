@@ -114,9 +114,7 @@ class GroupList extends React.Component<Props, State> {
             editorGroupId: record.ID
         })
     }
-    private saveFormRef = (formRef: any) => {
-        this.formRef = formRef
-    }
+    
     public handleOk = (e: any) => {
         e.preventDefault()
         const form = this.formRef.props.form
@@ -172,7 +170,6 @@ class GroupList extends React.Component<Props, State> {
                     return (
                         <React.Fragment>
                             <Button
-                                href="javascript:;"
                                 htmlType="button"
                                 size="small"
                                 type="primary"
@@ -184,7 +181,6 @@ class GroupList extends React.Component<Props, State> {
                                 查看
                             </Button>
                             <Button
-                                href="javascript:;"
                                 htmlType="button"
                                 size="small"
                                 type="primary"
@@ -260,7 +256,7 @@ class GroupList extends React.Component<Props, State> {
                     visible={this.state.showEditGroupName}
                     title="修改分组名称"
                     defaultName={this.state.editorName}
-                    wrappedComponentRef={this.saveFormRef}
+                    // wrappedComponentRef={this.saveFormRef}
                     handleOk={this.handleOk}
                     groups={this.state.groups}
                     changeVisible={this.groupNameVisible}

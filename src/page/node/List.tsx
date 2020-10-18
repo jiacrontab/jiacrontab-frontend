@@ -1,5 +1,7 @@
 import * as React from 'react'
-import { Table, Button, Form, Input, Tabs } from 'antd'
+import { Form } from 'antd';
+// import '@ant-design/compatible/assets/index.css';
+import { Table, Button, Input, Tabs } from 'antd';
 import BaseLayout from '../../layout/BaseLayout'
 import API from '../../config/api'
 import { getRequest, getGroupID } from '../../utils/utils'
@@ -15,7 +17,7 @@ const EditableRow = ({ form, index, ...props }: any) => (
     </EditableContext.Provider>
 )
 
-const EditableFormRow = Form.create()(EditableRow)
+const EditableFormRow = EditableRow
 
 interface EditorCell {
     editable: boolean
@@ -313,12 +315,12 @@ class UserNode extends React.Component<T> {
             },
             {
                 title: '操作',
+                width: '100px',
                 key: 'operation',
                 render: (record: any) => {
                     if (!record.disabled) {
                         return (
                             <Button
-                                href="javascript:;"
                                 htmlType="button"
                                 size="small"
                                 type="primary"
@@ -334,7 +336,6 @@ class UserNode extends React.Component<T> {
                         <Button
                             disabled={true}
                             size="small"
-                            href="javascript:;"
                             htmlType="button"
                             type="primary"
                             onClick={() => {
@@ -382,11 +383,11 @@ class UserNode extends React.Component<T> {
                     </TabPane>
                     <TabPane tab="活跃节点列表" key="2">
                     </TabPane>
-                    <TabPane tab="失联节点列表" key="3">
+                    <TabPane tab="异常节点列表" key="3">
                     </TabPane>
 
                     </Tabs>
-                <div className="jia-table">
+                <div className="jia-table table-reset">
                     <Search
                             placeholder="节点名"
                             onSearch={value => {
@@ -403,6 +404,9 @@ class UserNode extends React.Component<T> {
                                 wordWrap: 'break-word',
                                 wordBreak: 'break-all'
                             }}
+                            bordered
+                            rowKey="ID"
+                            size="small"
                             pagination={{
                                 total: this.data.total,
                                 pageSize: this.data.pageSize,
@@ -422,9 +426,7 @@ class UserNode extends React.Component<T> {
                                     this.reload()
                                 }
                             }}
-                            bordered
-                            rowKey="ID"
-                            size="small"
+                            
                             loading={this.state.loading}
                             components={components}
                             rowClassName={() => 'editable-row'}

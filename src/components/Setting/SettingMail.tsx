@@ -1,6 +1,9 @@
 import * as React from 'react'
-import { Form, Input, Button } from 'antd'
-import { FormComponentProps } from 'antd/lib/form'
+import { Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+// import '@ant-design/compatible/assets/index.css';
+import { Input, Button } from 'antd';
+// import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
 
@@ -9,15 +12,17 @@ interface State {
     loading: boolean
     token: any
     defaultData: any
+    formRef: React.RefObject<FormInstance>
 }
-class SettingMail extends React.Component<Props & FormComponentProps, State> {
+class SettingMail extends React.Component<Props, State> {
     public state: State
-    constructor(props: Props & FormComponentProps) {
+    constructor(props: Props) {
         super(props)
         this.state = {
             loading: false,
             token: '',
-            defaultData: {}
+            defaultData: {},
+            formRef: React.createRef<FormInstance>()
         }
     }
 
@@ -29,8 +34,8 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
 
     private handleSubmit = (e: any) => {
         e.preventDefault()
-        this.props.form.validateFields((err: any, values: any) => {
-            if (!err) {
+        this.state.formRef.current?.validateFields().then((values) => {
+            // if (!err) {
                 this.setState({
                     loading: true
                 })
@@ -45,7 +50,7 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
                         this.setState({
                             loading: false
                         })
-                        this.props.form.resetFields(['testEmail'])
+                        this.state.formRef.current?.resetFields(['testEmail'])
                     },
                     error: () => {
                         this.setState({
@@ -58,7 +63,7 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
                         })
                     }
                 })
-            }
+            // }
         })
     }
     private getDefaultData() {
@@ -75,8 +80,7 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
     }
 
     render() {
-        const { form } = this.props
-        const { getFieldDecorator } = form
+        // const { getFieldDecorator } = this.state.form
 
         const formItemLayout = {
             labelCol: { span: 4 },
@@ -90,41 +94,50 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
         }
         const { defaultData } = this.state
         let lableKey = []
+        let defaultValue = {}
         for (let i in defaultData) {
             lableKey.push(i)
+            defaultValue[`forms${i}`] = defaultData[i]
         }
+        console.log(defaultValue)
+        console.log(lableKey)
 
         return (
             <div>
-                <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-                    {lableKey.map(function (ele, index) {
+                <Form 
+                    onFinish={this.handleSubmit} 
+                    style={{ marginTop: 20 }} 
+                    ref={this.state.formRef}
+                    initialValues={
+                        defaultValue
+                    }
+                >
+                    {lableKey.length && lableKey.map(function (ele, index) {
+                        // let curName = `forms${ele}`
                         return defaultData[ele] !== '' ? (
                             <Form.Item
                                 {...formItemLayout}
                                 label={ele}
                                 key={index}
+                                name='formshost'
                             >
-                                {getFieldDecorator(`forms[${ele}]`, {
-                                    initialValue: defaultData[ele]
-                                })(<Input disabled />)}
+                                <Input disabled />
                             </Form.Item>
                         ) : null
                     })}
-                    <Form.Item {...formItemLayout} label="测试地址">
-                        {getFieldDecorator('testEmail', {
-                            rules: [
-                                {
-                                    message: '请输入测试地址',
-                                    required: true
-                                }
-                            ]
-                        })(
-                            <Input
-                                size="large"
-                                type="email"
-                                placeholder="请输入测试地址"
-                            />
-                        )}
+                    <Form.Item 
+                        name="testEmail" 
+                        {...formItemLayout} 
+                        label="测试地址"
+                        rules={[{ required: true, message: '请输入测试地址' }]}
+                        
+                    >
+                        <Input
+                            size="large"
+                            type="email"
+                            placeholder="请输入测试地址"
+                        />
+                        
                     </Form.Item>
                     <Form.Item {...formTailLayout}>
                         <Button
@@ -141,5 +154,5 @@ class SettingMail extends React.Component<Props & FormComponentProps, State> {
         )
     }
 }
-
-export default Form.create({})(SettingMail)
+export default SettingMail
+// export default Form.create({})(SettingMail)

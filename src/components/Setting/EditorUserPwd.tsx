@@ -1,6 +1,10 @@
 import * as React from 'react'
-import { Form, Input, Button, Icon, Modal } from 'antd'
-import { FormComponentProps } from 'antd/lib/form'
+import { LockOutlined } from '@ant-design/icons';
+import { Form } from 'antd';
+import { FormInstance } from 'antd/lib/form';
+// import '@ant-design/compatible/assets/index.css';
+import { Input, Button, Modal } from 'antd';
+// import { FormComponentProps } from '@ant-design/compatible/lib/form';
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
 import { hashHistory } from '../../utils/history'
@@ -10,17 +14,19 @@ interface State {
     token: string | null
     loading: boolean
     user: string,
-    userID: Number
+    userID: Number,
+    formRef: React.RefObject<FormInstance>
 }
-class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
+class EditorUserPwd extends React.Component<Props, State> {
     public state: State
-    constructor(props: Props & FormComponentProps) {
+    constructor(props: Props) {
         super(props)
         this.state = {
             loading: false,
             token: '',
             user: '',
-            userID: -1
+            userID: -1,
+            formRef: React.createRef<FormInstance>()
         }
     }
 
@@ -59,7 +65,7 @@ class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
                     title: '温馨提示',
                     content: '修改成功,请重新登陆',
                     onOk: () => {
-                        this.props.form.resetFields()
+                        this.state.formRef.current?.resetFields()
                         localStorage.removeItem('jiaToken')
                         localStorage.removeItem('userInfo')
                         hashHistory.push('/login')
@@ -80,8 +86,8 @@ class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
     }
 
     private compareToFirstPassword = (rule: any, value: string, callback: any) => {
-        const { form } = this.props;
-        if (value && value !== form.getFieldValue('passwd')) {
+        // const { form } = this.state.form;
+        if (value && value !== this.state.formRef.current?.getFieldValue('passwd')) {
             callback('两次输入的密码不一致，请重新输入!');
         } else {
             callback();
@@ -90,19 +96,19 @@ class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
 
     private submitPwd = (e: any) => {
         e.preventDefault()
-        this.props.form.validateFields((err: any, values: any) => {
-            if (!err) {
+        this.state.formRef.current?.validateFields().then((values) => {
+            // if (!err) {
                 this.setState({
                     loading: true
                 })
                 this.changePassword(values)
-            }
+            // }
         })
     }
 
     render() {
-        const { form } = this.props
-        const { getFieldDecorator } = form
+        // const { form } = this.props
+        // const { getFieldDecorator } = this.state.form
 
         const formItemLayout = {
             labelCol: { span: 5 },
@@ -116,7 +122,16 @@ class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
         }
 
         return (
-            <Form onSubmit={this.submitPwd} style={{ marginTop: 20 }}>
+            <Form 
+                onFinish={this.submitPwd} 
+                style={{ marginTop: 20 }} 
+                ref={this.state.formRef}
+                initialValues={
+                    {
+                        
+                    }
+                }
+            >
                 {/* <Form.Item {...formItemLayout} label="用户名">
                     {getFieldDecorator('username', {
                         initialValue: user,
@@ -129,7 +144,7 @@ class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
                         ]
                     })(
                         <Input
-                            name="username"
+                            // name="username"
                             size="large"
                             prefix={
                                 <Icon
@@ -142,80 +157,54 @@ class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
                         />
                     )}
                 </Form.Item> */}
-                <Form.Item {...formItemLayout} label="旧密码">
-                    {getFieldDecorator('oldpwd', {
-                        rules: [
-                            {
-                                message: '请输入旧密码',
-                                required: true,
-                                whitespace: true
-                            }
-                        ]
-                    })(
+                <Form.Item {...formItemLayout} label="旧密码" name="oldpwd"
+                        rules={[{ required: true, message: '请输入旧密码' }]}>
+                    
                         <Input
-                            name="oldpwd"
+                            // name="oldpwd"
                             size="large"
                             prefix={
-                                <Icon
-                                    type="lock"
-                                    style={{ color: 'rgba(0,0,0,.25)' }}
-                                />
+                                <LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
                             }
                             type="password"
                             placeholder="请输入旧密码"
                         />
-                    )}
+                    
                 </Form.Item>
-                <Form.Item {...formItemLayout} label="新密码">
-                    {getFieldDecorator('passwd', {
-                        rules: [
-                            {
-                                message: '请输入新的密码',
-                                required: true,
-                                whitespace: true
-                            }
-                        ]
-                    })(
+                <Form.Item {...formItemLayout} label="新密码" name="passwd"
+                        rules={[{ required: true, message: '请输入新的密码' }]}>
+                    
                         <Input
-                            name="passwd"
+                            // name="passwd"
                             size="large"
                             prefix={
-                                <Icon
-                                    type="lock"
-                                    style={{ color: 'rgba(0,0,0,.25)' }}
-                                />
+                                <LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
                             }
                             type="password"
                             placeholder="请输入新的密码"
                         />
-                    )}
+                    
                 </Form.Item>
-                <Form.Item {...formItemLayout} label="确认新密码">
-                    {getFieldDecorator('confirmpwd', {
-                        rules: [
-                            {
-                                message: '请确认新密码',
-                                required: true,
-                                whitespace: true
-                            },
-                            {
-                                validator: this.compareToFirstPassword,
-                            }
-                        ]
-                    })(
+                <Form.Item 
+                    {...formItemLayout} 
+                    label="确认新密码" 
+                    name="confirmpwd"
+                    rules={[
+                        { required: true, message: '请确认新密码' },
+                        {
+                            validator: this.compareToFirstPassword,
+                        }
+                    ]}>
                         <Input
-                            name="confirmpwd"
+                            // name="confirmpwd"
                             size="large"
                             prefix={
-                                <Icon
-                                    type="lock"
-                                    style={{ color: 'rgba(0,0,0,.25)' }}
-                                />
+                                <LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />
                             }
                             type="password"
                             placeholder="请确认新密码"
                         />
-                    )}
+                    
                 </Form.Item>
 
                 <Form.Item {...formTailLayout}>
@@ -229,8 +218,8 @@ class EditorUserPwd extends React.Component<Props & FormComponentProps, State> {
                             </Button>
                 </Form.Item>
             </Form>
-        )
+        );
     }
 }
-
-export default Form.create({})(EditorUserPwd)
+export default EditorUserPwd
+// export default Form.create({})(EditorUserPwd)
