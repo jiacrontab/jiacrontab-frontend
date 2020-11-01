@@ -408,7 +408,7 @@ class EditDaemon extends React.Component<Props,State> {
                             </Form.Item>
 
                             <Form.Item {...formItemLayout} label="失败重启" name="failRestart">
-                                <Switch />
+                                <Switch checked={defaultFormValus.failRestart} />
                             </Form.Item>
                             <Form.Item {...formItemLayout} label="失败重试次数" name="retryNum">
                                 <InputNumber

@@ -67,6 +67,15 @@ class EditUserGroupForm extends React.Component<
     render() {
         // const { form } = this.props
         // const { getFieldDecorator } = form
+        let defaultValue = {
+            types: this.state.radioValue, 
+            groupId:this.data.groupID,
+            root: true
+        }
+        setTimeout(() => {
+            this.state.formRef.current?.resetFields()
+            this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue})
+        },10)
         return (
             <div>
                 <Modal
@@ -82,11 +91,7 @@ class EditUserGroupForm extends React.Component<
                         layout="vertical"
                         ref={this.state.formRef}
                         initialValues={
-                            { 
-                                types: this.state.radioValue, 
-                                groupId:this.data.groupID,
-                                root: true
-                            }
+                            defaultValue
                         }
                     >
                         <Form.Item name="types">

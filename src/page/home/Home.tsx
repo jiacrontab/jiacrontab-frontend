@@ -9,7 +9,8 @@ import {
     Tag,
     Skeleton,
     Button,
-    Modal
+    Modal,
+    Input
 } from 'antd'
 import BaseLayout from '../../layout/BaseLayout'
 import { getRequest, time } from '../../utils/utils'
@@ -32,6 +33,7 @@ interface State {
     userStat: any
     systemInfo: any
     version: string
+    searchTxt: string
 }
 class Home extends React.Component<Props, State> {
     public state: State
@@ -48,7 +50,8 @@ class Home extends React.Component<Props, State> {
             content: {},
             userStat: {},
             systemInfo: {},
-            version: ''
+            version: '',
+            searchTxt: ''
         }
     }
 
@@ -310,8 +313,10 @@ class Home extends React.Component<Props, State> {
     private changeActivity = (e: any) => {
         this.setState({
             defalutList: e.target.value,
-            isHasMore: false
+            isHasMore: false,
+            searchTxt: ''
         })
+        // this.props.form.setFieldsValue({name:''});
         if (e.target.value == 'job') {
             this.setState(
                 {
@@ -344,9 +349,23 @@ class Home extends React.Component<Props, State> {
             visible: false
         })
     }
+    private search = (value:string) => {
+        this.setState({
+            searchTxt: value
+        })
+        console.log('查询：',value)
+    }
+
+    private searchChange = (e:any) => {
+        const { value } = e.target;
+        this.setState({
+            searchTxt: value
+        })
+    }
 
     public render(): any {
         const data = this.state.listData
+        const { Search } = Input
         const loadMore =
             this.state.isHasMore && !this.state.loadingMore ? (
                 <div
@@ -472,6 +491,19 @@ class Home extends React.Component<Props, State> {
                             <Radio.Button value="user">用户动态</Radio.Button>
                             <Radio.Button value="job">job动态</Radio.Button>
                         </Radio.Group>
+                        <Search
+                            placeholder="搜索动态"
+                            onSearch={this.search}
+                            value={this.state.searchTxt}
+                            onChange={this.searchChange}
+                            // onSearch={value => {
+                            //     this.data.searchTxt = value
+                            //     this.data.page = 1
+                            //     this.reload()
+                            // }}
+                            enterButton="查询"
+                            style={{ width: 200, marginBottom: 10, marginLeft: 20 }}
+                        />
                         {data.length == 0 && this.state.loadingMore ? (
                             this.state.loadingMore ? (
                                 <div style={{ height: 30 }} />

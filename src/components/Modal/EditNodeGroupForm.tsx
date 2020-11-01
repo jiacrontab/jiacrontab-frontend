@@ -79,7 +79,7 @@ class EditNodeGroupForm extends React.Component<
                                 name="title"
                                 rules={[{ required: true, message: '请输入分组名称' }]}
                             >
-                                <Input placeholder="请输入分组名称" />)
+                                <Input placeholder="请输入分组名称" />
                             </Form.Item>
                         ) : (
                                 <Form.Item name="groupId">

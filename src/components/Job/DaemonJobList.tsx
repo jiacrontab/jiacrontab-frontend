@@ -433,7 +433,7 @@ class DaemonJobList extends React.Component<JobInfo> {
                 // style={{ height: 'calc(100% - 60px)', overflowY: 'auto' }}
                 >
                     <Search
-                        placeholder="任务名"
+                        placeholder="关键词"
                         onSearch={value => {
                             this.data.searchTxt = value
                             this.props.reload(

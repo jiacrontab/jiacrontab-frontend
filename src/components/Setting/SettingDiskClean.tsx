@@ -1,9 +1,7 @@
 import * as React from 'react'
 import { Form } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-// import '@ant-design/compatible/assets/index.css';
-import { Input, Button } from 'antd';
-// import { FormComponentProps } from '@ant-design/compatible/lib/form';
+import { Button, Select,Input } from 'antd';
 import { getRequest } from '../../utils/utils'
 import API from 'src/config/api'
 
@@ -14,26 +12,25 @@ interface State {
     defaultData: any
     formRef: React.RefObject<FormInstance>
 }
-class SettingMail extends React.Component<Props, State> {
+class SettingDiskClean extends React.Component<Props, State> {
     public state: State
     constructor(props: Props) {
         super(props)
         this.state = {
             loading: false,
             token: '',
-            defaultData: {},
+            defaultData: {
+            },
             formRef: React.createRef<FormInstance>()
         }
     }
 
     componentDidMount() {
-        this.setState({ token: localStorage.getItem('jiaToken') }, () => {
-            this.getDefaultData()
-        })
+        this.setState({ token: localStorage.getItem('jiaToken') })
     }
 
     private handleSubmit = (e: any) => {
-        e.preventDefault()
+        // e.preventDefault()
         this.state.formRef.current?.validateFields().then((values) => {
             // if (!err) {
                 this.setState({
@@ -41,16 +38,17 @@ class SettingMail extends React.Component<Props, State> {
                 })
 
                 getRequest({
-                    url: API.configSend,
+                    url: API.CleanJobHistory,
                     token: this.state.token,
                     data: {
-                        mailTo: values.testEmail
+                        offset: values.offset,
+                        unit: values.unit
                     },
                     succ: (data: any) => {
                         this.setState({
                             loading: false
                         })
-                        this.state.formRef.current?.resetFields(['testEmail'])
+                        this.state.formRef.current?.resetFields()
                     },
                     error: () => {
                         this.setState({
@@ -66,44 +64,20 @@ class SettingMail extends React.Component<Props, State> {
             // }
         })
     }
-    private getDefaultData() {
-        getRequest({
-            url: API.configGet,
-            token: this.state.token,
-            data: {},
-            succ: (data: any) => {
-                this.setState({
-                    defaultData: JSON.parse(data).mail
-                })
-            }
-        })
-    }
+
 
     render() {
-        // const { getFieldDecorator } = this.state.form
-
         const formItemLayout = {
             labelCol: { span: 4 },
-            wrapperCol: { span: 10 }
+            wrapperCol: { span: 18 }
         }
         const formTailLayout = {
             wrapperCol: {
-                xs: { span: 10, offset: 4 },
-                sm: { span: 10, offset: 4 }
+                xs: { span: 18, offset: 4 },
+                sm: { span: 18, offset: 4 }
             }
         }
         const { defaultData } = this.state
-        let lableKey = []
-        let defaultValue = {}
-        for (let i in defaultData) {
-            lableKey.push(i)
-            defaultValue[`${i}`] = defaultData[i]
-        }
-
-        setTimeout(() => {
-            this.state.formRef.current?.resetFields()
-            this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue})
-        },10)
 
         return (
             <div>
@@ -112,34 +86,34 @@ class SettingMail extends React.Component<Props, State> {
                     style={{ marginTop: 20 }} 
                     ref={this.state.formRef}
                     initialValues={
-                        defaultValue
+                        defaultData
                     }
                 >
-                    {lableKey.length && lableKey.map(function (ele, index) {
-                        // let curName = `forms${ele}`
-                        return defaultData[ele] !== '' ? (
-                            <Form.Item
-                                {...formItemLayout}
-                                label={ele}
-                                key={index}
-                                name={ele}
-                            >
-                                <Input disabled />
-                            </Form.Item>
-                        ) : null
-                    })}
                     <Form.Item 
-                        name="testEmail" 
                         {...formItemLayout} 
-                        label="测试地址"
-                        rules={[{ required: true, message: '请输入测试地址' }]}
-                        
+                        label="清除日志文件"
                     >
-                        <Input
-                            size="large"
-                            type="email"
-                            placeholder="请输入测试地址"
-                        />
+                        <Input.Group compact>
+                            <Form.Item 
+                                name="offset" 
+                                {...formItemLayout}
+                                rules={[{ required: true, message: '请输入时间' }]}
+                            >
+                                <Input size="large" style={{ width: 130 }} placeholder="请输入时间"/>
+                            </Form.Item>
+                            <Form.Item 
+                                name="unit" 
+                                {...formItemLayout}
+                                rules={[{ required: true, message: '请选择时间单位' }]}
+                            >
+                                <Select size="large" style={{ width: 150 }} allowClear placeholder="选择时间单位">
+                                    <Select.Option value="month">月前</Select.Option>
+                                    <Select.Option value="week">周前</Select.Option>
+                                    <Select.Option value="day">日前</Select.Option>
+                                    <Select.Option value="hour">小时前</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Input.Group>
                         
                     </Form.Item>
                     <Form.Item {...formTailLayout}>
@@ -157,5 +131,4 @@ class SettingMail extends React.Component<Props, State> {
         )
     }
 }
-export default SettingMail
-// export default Form.create({})(SettingMail)
+export default SettingDiskClean

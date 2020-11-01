@@ -17,6 +17,7 @@ import GroupList from './page/group/List'
 import SettingMail from './page/setting/SettingMail'
 import SettingUser from './page/setting/SettingUser'
 import SettingInfo from './page/setting/SettingInfo'
+import SettingDiskClean from './page/setting/SettingDiskClean'
 
 import NodeDetail from './page/node/Detail'
 import CrontabJobForm from './page/edit/CrontabJob'
@@ -39,6 +40,7 @@ ReactDOM.render(
                 <Route path="/setting/mail" component={SettingMail} />
                 <Route path="/setting/user" component={SettingUser} />
                 <Route path="/setting/info" component={SettingInfo} />
+                <Route path="/setting/disk_clean" component={SettingDiskClean} />
                 <Route path="/node/detail" component={NodeDetail} />
                 <Route path="/edit/crontab_job" component={CrontabJobForm} />
                 <Route path="/edit/daemon_job" component={DaemonJobForm} />

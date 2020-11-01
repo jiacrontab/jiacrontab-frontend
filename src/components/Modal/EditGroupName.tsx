@@ -68,7 +68,7 @@ class EditGroupName extends React.Component<
                                 name="groupName"
                                 rules={[{ required: true, message: '请输入分组名称' }]}
                             >
-                            <Input placeholder="请输入分组名称" />)
+                            <Input placeholder="请输入分组名称" />
                         </Form.Item>
                     </Form>
                 </Modal>

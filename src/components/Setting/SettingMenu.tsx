@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { EditOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { EditOutlined, MailOutlined, UserOutlined, ClearOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { hashHistory } from '../../utils/history'
 
@@ -39,6 +39,9 @@ class SettingMenu extends React.Component<Props, State> {
         if (hashHistory.location.pathname == '/setting/info') {
             selectText = 'info'
         }
+        if (hashHistory.location.pathname == '/setting/disk_clean') {
+            selectText = 'disk'
+        }
         this.setState({
             defaultSelect: selectText
         })
@@ -55,6 +58,10 @@ class SettingMenu extends React.Component<Props, State> {
         if (item.key === 'info') {
             if (hashHistory.location.pathname == '/setting/info') return
             hashHistory.push('/setting/info')
+        }
+        if (item.key === 'disk') {
+            if (hashHistory.location.pathname == '/setting/disk_clean') return
+            hashHistory.push('/setting/disk_clean')
         }
     }
     public render(): any {
@@ -82,6 +89,10 @@ class SettingMenu extends React.Component<Props, State> {
                 <Menu.Item key="info">
                     <EditOutlined />
                     修改信息
+                </Menu.Item>
+                <Menu.Item key="disk">
+                    <ClearOutlined />
+                    磁盘清理
                 </Menu.Item>
             </Menu>
         );

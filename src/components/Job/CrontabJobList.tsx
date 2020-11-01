@@ -79,6 +79,12 @@ class CrontabJobList extends React.Component<JobInfo> {
         this.auditJob(this.props.addr, this.state.selectedRowKeys, 'crontab')
     }
 
+    private handleStart = () => {
+        this.props.changeLoading(true)
+        this.controlAction(this.props.addr, this.state.selectedRowKeys, 'batch-exec')
+    }
+    
+
     private add = () => {
         let params: any = {
             id: '',
@@ -609,7 +615,7 @@ class CrontabJobList extends React.Component<JobInfo> {
             >
                 <div className="table-btn">
                     <Search
-                        placeholder="任务名"
+                        placeholder="关键词"
                         onSearch={value => {
                             this.data.searchTxt = value
                             this.props.reload(
@@ -628,6 +634,19 @@ class CrontabJobList extends React.Component<JobInfo> {
                     >
                         添加
                     </Button>
+                    {
+                        (!this.data.userInfo.root &&
+                        this.data.userInfo.groupID !== 1) ? null : (<Button
+                            type="primary"
+                            htmlType="button"
+                            onClick={this.handleStart}
+                            disabled={!hasSelected}
+                            style={{ float: 'right', marginRight: 10 }}
+                        >
+                            手动执行
+                        </Button>)
+                    }
+                    
                     <Button
                         type="primary"
                         htmlType="button"

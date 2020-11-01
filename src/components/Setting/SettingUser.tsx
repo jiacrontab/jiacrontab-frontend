@@ -161,6 +161,15 @@ class SettingUser extends React.Component<Props, State> {
                 sm: { span: 10, offset: 3 }
             }
         }
+        let defaultValue = {
+            groupType: this.state.radioValue,
+            groupId: this.data.groupID,
+            root: this.state.checked
+        }
+        setTimeout(() => {
+            this.state.formRef.current?.resetFields()
+            this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue})
+        },10)
 
         return (
             <div>
@@ -169,11 +178,7 @@ class SettingUser extends React.Component<Props, State> {
                     style={{ marginTop: 20 }}
                     ref={this.state.formRef}
                     initialValues={
-                        {
-                            groupType: this.state.radioValue,
-                            groupId: this.data.groupID,
-                            root: this.state.checked
-                        }
+                        defaultValue
                     }
                 >
                     <Form.Item

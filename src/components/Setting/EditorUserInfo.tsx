@@ -120,17 +120,23 @@ class EditorUserInfo extends React.Component<Props, State> {
                 sm: { span: 15, offset: 5 }
             }
         }
+        let defaultValue = {
+            username: user,
+            mail
+        }
+        setTimeout(() => {
+            this.state.formRef.current?.resetFields()
+            this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue})
+        },10)
+
 
         return (
             <Form 
                 onFinish={this.submitInfo} 
                 ref={this.state.formRef}
                 initialValues={
-                    {
-                        username: user,
-                        mail,
-                    }
-                } 
+                    defaultValue
+                }
                 style={{ marginTop: 20 }}
             >
                 <Form.Item {...formItemLayout} label="用户名" name="username"
