@@ -119,7 +119,7 @@ class SettingUser extends React.Component<Props, State> {
     }
 
     private handleSubmit = (e: any) => {
-        e.preventDefault()
+        // e.preventDefault()
         this.state.formRef.current?.validateFields().then((values) => {
             // if (!err) {
             this.setState({

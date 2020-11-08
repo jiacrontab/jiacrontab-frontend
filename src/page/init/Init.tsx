@@ -49,7 +49,7 @@ class Init extends React.Component<Props,State> {
         //[username[:password]@][protocol[(address)]]/dbname[?param1=value1&...&paramN=valueN]
     }
     private handleSubmit = (e: any) => {
-        e.preventDefault()
+        // e.preventDefault()
         this.state.formRef.current?.validateFields().then(values => {
             // if (!err) {
                 this.setState({
