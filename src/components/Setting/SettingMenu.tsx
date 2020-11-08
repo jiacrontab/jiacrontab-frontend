@@ -90,10 +90,13 @@ class SettingMenu extends React.Component<Props, State> {
                     <EditOutlined />
                     修改信息
                 </Menu.Item>
-                <Menu.Item key="disk">
-                    <ClearOutlined />
-                    磁盘清理
-                </Menu.Item>
+                {groupID === 1 && root ? (
+                    <Menu.Item key="disk">
+                        <ClearOutlined />
+                        磁盘清理
+                    </Menu.Item>
+                ) : null}
+                
             </Menu>
         );
     }

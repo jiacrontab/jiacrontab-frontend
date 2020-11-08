@@ -35,7 +35,6 @@ class EditorUserInfo extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        console.log(this.state.formRef)
         if (window.localStorage) {
             if (localStorage.getItem('userInfo')) {
                 let userInfos: any = localStorage.getItem('userInfo')
@@ -99,7 +98,6 @@ class EditorUserInfo extends React.Component<Props, State> {
                 this.setState({
                     loading: true
                 })
-                console.log(values)
                 this.changeInfo(values)
             // }
         })

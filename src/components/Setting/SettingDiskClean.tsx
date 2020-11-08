@@ -41,7 +41,7 @@ class SettingDiskClean extends React.Component<Props, State> {
                     url: API.CleanJobHistory,
                     token: this.state.token,
                     data: {
-                        offset: values.offset,
+                        offset: Number(values.offset),
                         unit: values.unit
                     },
                     succ: (data: any) => {
@@ -108,9 +108,9 @@ class SettingDiskClean extends React.Component<Props, State> {
                             >
                                 <Select size="large" style={{ width: 150 }} allowClear placeholder="选择时间单位">
                                     <Select.Option value="month">月前</Select.Option>
-                                    <Select.Option value="week">周前</Select.Option>
+                                    {/* <Select.Option value="week">周前</Select.Option> */}
                                     <Select.Option value="day">日前</Select.Option>
-                                    <Select.Option value="hour">小时前</Select.Option>
+                                    {/* <Select.Option value="hour">小时前</Select.Option> */}
                                 </Select>
                             </Form.Item>
                         </Input.Group>

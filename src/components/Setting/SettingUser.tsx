@@ -71,7 +71,6 @@ class SettingUser extends React.Component<Props, State> {
     }
 
     private submitSetting(values: any) {
-        console.log(values)
         let defaultParams = {
             username: values.username,
             passwd: values.passwd,

@@ -14,6 +14,7 @@ interface Props extends ModalProps {
     title: string
     groups: any[]
     changeVisible: any
+    onRef?:any
 }
 interface State {
     radioValue: string
@@ -43,7 +44,9 @@ class EditUserGroupForm extends React.Component<
         }
     }
 
-    componentDidMount() { }
+    componentDidMount() { 
+        this.props.onRef(this)
+    }
     private handleCancel = () => {
         this.props.changeVisible(false)
         this.state.formRef.current?.resetFields();
@@ -64,6 +67,17 @@ class EditUserGroupForm extends React.Component<
             })
         }
     }
+    private currentModalOk = (e: any) => {
+        this.handleSubmit()
+    }
+    private handleSubmit = () => {
+        this.state.formRef.current?.validateFields().then((values) => {
+            this.props.handleOk(values)
+        }) 
+    }
+    resetForm = () => {
+        this.state.formRef.current?.resetFields() 
+    }
     render() {
         // const { form } = this.props
         // const { getFieldDecorator } = form
@@ -83,7 +97,7 @@ class EditUserGroupForm extends React.Component<
                     cancelText="取消"
                     okText="提交"
                     visible={this.props.visible}
-                    onOk={this.props.handleOk}
+                    onOk={this.currentModalOk}
                     onCancel={this.handleCancel}
                     destroyOnClose={true}
                 >

@@ -20,6 +20,7 @@ interface State {
     groups: any[]
     nodeListAddr: string
     nodeListName: string
+    child: any
 }
 
 interface Data {
@@ -38,7 +39,8 @@ class GroupNodeList extends React.Component<Props, State> {
             showEditUserGroupForm: false,
             groups: [],
             nodeListAddr: '',
-            nodeListName: ''
+            nodeListName: '',
+            child: ''
         }
         this.data = {
             token: '',
@@ -72,11 +74,11 @@ class GroupNodeList extends React.Component<Props, State> {
     }
 
     
-    public handleOk = (e: any) => {
-        e.preventDefault()
-        const form = this.formRef.props.form
-        form.validateFields((err: any, values: any) => {
-            if (!err) {
+    public handleOk = (values:any) => {
+        // e.preventDefault()
+        // const form = this.formRef.props.form
+        // form.validateFields((err: any, values: any) => {
+        //     if (!err) {
                 let paramsData = {}
                 if (values.types === 'new') {
                     paramsData = {
@@ -96,7 +98,7 @@ class GroupNodeList extends React.Component<Props, State> {
                     token: this.data.token,
                     data: paramsData,
                     succ: (data: any) => {
-                        form.resetFields()
+                        this.state.child.resetForm()
                         this.setState({
                             showEditUserGroupForm: false
                         })
@@ -104,8 +106,8 @@ class GroupNodeList extends React.Component<Props, State> {
                         this.props.getGroupNodeList()
                     }
                 })
-            }
-        })
+        //     }
+        // })
     }
     private changeVisible = (status: boolean) => {
         this.setState({ showEditUserGroupForm: status })
@@ -146,6 +148,9 @@ class GroupNodeList extends React.Component<Props, State> {
                 this.props.changeLoading(false)
             }
         })
+    }
+    onRef = (ref:any) => {
+        this.state.child = ref
     }
 
     public render(): any {
@@ -291,6 +296,7 @@ class GroupNodeList extends React.Component<Props, State> {
                     title="编辑节点分组"
                     handleOk={this.handleOk}
                     groups={this.state.groups}
+                    onRef={this.onRef}
                     changeVisible={this.changeVisible}
                 />
             </div>

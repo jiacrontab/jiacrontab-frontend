@@ -1,21 +1,37 @@
-import * as React from 'react'
+// import * as React from 'react'
+import React from 'react';
 import { Form } from 'antd';
 // import '@ant-design/compatible/assets/index.css';
 import { Table, Button, Input, Tabs } from 'antd';
 import BaseLayout from '../../layout/BaseLayout'
 import API from '../../config/api'
 import { getRequest, getGroupID } from '../../utils/utils'
+import { FormInstance } from 'antd/lib/form';
 import './List.css'
 
 const FormItem = Form.Item
 const { TabPane } = Tabs
-const EditableContext = React.createContext('huahua')
+const EditableContext = React.createContext<any>('');
+interface EditableRowProps {
+    index: number;
+  }
+  
+const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
+    const [form] = Form.useForm();
+    return (
+        <Form form={form} component={false}>
+        <EditableContext.Provider value={form}>
+            <tr {...props} />
+        </EditableContext.Provider>
+        </Form>
+    );
+};
 
-const EditableRow = ({ form, index, ...props }: any) => (
-    <EditableContext.Provider value={form}>
-        <tr {...props} />
-    </EditableContext.Provider>
-)
+// const EditableRow = ({ form, index, ...props }: any) => (
+//     <EditableContext.Provider value={form}>
+//         <tr {...props} />
+//     </EditableContext.Provider>
+// )
 
 const EditableFormRow = EditableRow
 
@@ -35,8 +51,10 @@ class EditableCell extends React.Component<EditorCell> {
         super(props)
     }
     state = {
-        editing: false
+        editing: false,
+        form: React.createRef<FormInstance>()
     }
+    // const form = useContext(EditableContext);
 
     componentDidMount() {
         if (this.props.editable) {
@@ -53,18 +71,27 @@ class EditableCell extends React.Component<EditorCell> {
     toggleEdit = () => {
         const editing = !this.state.editing
         this.setState({ editing })
+        this.state.form.current?.setFieldsValue({ [this.props.dataIndex]: this.props.record[this.props.dataIndex] });
     }
 
     handleClickOutside = (e: any) => { }
 
-    save = (record: any, form: any) => {
-        form.validateFields((error: object, values: any) => {
-            if (error) {
-                return
-            }
+    save = async (record: any, form: any) => {
+        try {
+            const values = await this.state.form.current?.validateFields();
+      
             this.toggleEdit()
             this.props.handleSave({ ...record, ...values })
-        })
+          } catch (errInfo) {
+            console.log('Save failed:', errInfo);
+          }
+        // form.validateFields((error: object, values: any) => {
+        //     if (error) {
+        //         return
+        //     }
+        //     this.toggleEdit()
+        //     this.props.handleSave({ ...record, ...values })
+        // })
     }
 
     render() {
@@ -82,25 +109,26 @@ class EditableCell extends React.Component<EditorCell> {
             <td>
                 {editable ? (
                     <EditableContext.Consumer>
-                        {(form: any) => {
+                        {() => {
                             // this.form = form;
                             return editing ? (
-                                <FormItem style={{ margin: 0 }}>
-                                    {form.getFieldDecorator(dataIndex, {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: `${title}不能为空`
-                                            }
-                                        ],
-                                        initialValue: record[dataIndex]
-                                    })(
+                                <FormItem 
+                                    style={{ margin: 0 }}
+                                    name={dataIndex}
+                                    rules={[
+                                    {
+                                        required: true,
+                                        message: `${title} 不能为空`,
+                                    },
+                                    ]}
+                                >
+                                    
                                         <Input
                                             onBlur={() => {
-                                                this.save(record, form)
+                                                this.save(record,this.state.form)
                                             }}
                                         />
-                                    )}
+                                    
                                 </FormItem>
                             ) : (
                                     <div

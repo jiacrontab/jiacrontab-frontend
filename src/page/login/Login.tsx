@@ -70,7 +70,6 @@ class Login extends React.Component<IUserFormProps, State> {
     public submitForm() {
         // e.preventDefault()
         this.state.formRef.current?.validateFields().then(value => {
-            console.log(value)
             getRequest({
                 url: API.LoginConfig,
                 data: {

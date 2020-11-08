@@ -89,7 +89,8 @@ class Home extends React.Component<Props, State> {
             url: API.ActivityList,
             token: this.state.token,
             data: {
-                lastID
+                lastID,
+                keywords: this.state.searchTxt
             },
             succ: (data: any) => {
                 const resultData = JSON.parse(data)
@@ -124,7 +125,8 @@ class Home extends React.Component<Props, State> {
             url: API.JobHistory,
             token: this.state.token,
             data: {
-                lastID
+                lastID,
+                keywords: this.state.searchTxt
             },
             succ: (data: any) => {
                 const resultData = JSON.parse(data)
@@ -353,7 +355,18 @@ class Home extends React.Component<Props, State> {
         this.setState({
             searchTxt: value
         })
-        console.log('查询：',value)
+        this.setState(
+            {
+                loadingMore: true
+            },
+            () => {
+                if (this.state.defalutList == 'job') {
+                    this.getJobHistory(0)
+                } else {
+                    this.getActivityList(0)
+                }
+            }
+        )
     }
 
     private searchChange = (e:any) => {
@@ -523,7 +536,8 @@ class Home extends React.Component<Props, State> {
                                             <span
                                                 style={{
                                                     marginRight: '20px',
-                                                    color: '#1890ff'
+                                                    color: '#1890ff',
+                                                    cursor: 'pointer'
                                                 }}
                                                 onClick={() => {
                                                     this.detail(item)
@@ -553,8 +567,7 @@ class Home extends React.Component<Props, State> {
                     </Card>
                     <Modal
                         title="动态详情"
-                        cancelText="取消"
-                        okText="确定"
+                        footer={null}
                         visible={this.state.visible}
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}

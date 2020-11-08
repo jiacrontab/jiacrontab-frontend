@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Table, Tabs, Button, Input } from 'antd'
+import { Table, Tabs, Button, Input} from 'antd'
+import { FormInstance } from 'antd/lib/form';
 import { getRequest, time, getGroupID } from '../../utils/utils'
 import BaseLayout from '../../layout/BaseLayout'
 import API from 'src/config/api'
@@ -17,7 +18,9 @@ interface State {
     users: any[]
     groups: any[]
     showEditUserGroupForm: boolean
-    nodeListData: any[]
+    nodeListData: any[],
+    formRef: React.RefObject<FormInstance>
+    child: any
 }
 
 interface Data {
@@ -34,7 +37,6 @@ interface Data {
 class UserList extends React.Component<Props, State> {
     public state: State
     public data: Data
-    public formRef: any
     constructor(props: any) {
         super(props)
         this.state = {
@@ -42,7 +44,9 @@ class UserList extends React.Component<Props, State> {
             groups: [],
             showEditUserGroupForm: false,
             users: [],
-            nodeListData: []
+            nodeListData: [],
+            formRef: React.createRef<FormInstance>(),
+            child: ''
         }
         this.data = {
             page: 1,
@@ -213,11 +217,11 @@ class UserList extends React.Component<Props, State> {
     //     })
     // }
 
-    public handleOk = (e: any) => {
-        e.preventDefault()
-        const form = this.formRef.props.form
-        form.validateFields((err: any, values: any) => {
-            if (!err) {
+    public handleOk = (values: any) => {
+        // e.preventDefault()
+        // const form = this.formRef.props.form
+        // this.state.formRef.current?.validateFields().then((values) => {
+            // if (!err) {
                 let paramsData = {}
                 if (values.types === 'new') {
                     paramsData = {
@@ -240,7 +244,7 @@ class UserList extends React.Component<Props, State> {
                     token: this.data.token,
                     data: paramsData,
                     succ: (data: any) => {
-                        form.resetFields()
+                        this.state.child.resetForm()
                         this.setState({
                             loading: false,
                             showEditUserGroupForm: false
@@ -258,8 +262,8 @@ class UserList extends React.Component<Props, State> {
                         })
                     }
                 })
-            }
-        })
+            // }
+        // })
     }
     private changeVisible = (status: boolean) => {
         this.setState({ showEditUserGroupForm: status })
@@ -293,7 +297,6 @@ class UserList extends React.Component<Props, State> {
         }
     }
     private removeUserList = (record: any) => {
-        console.log(record)
         this.setState({
             loading: true
         })
@@ -304,7 +307,6 @@ class UserList extends React.Component<Props, State> {
                 userID: record.ID,
             },
             succ: (data: any) => {
-                console.log(data)
                 this.getUserList()
             },
             error: () => {
@@ -318,6 +320,9 @@ class UserList extends React.Component<Props, State> {
                 })
             }
         })
+    }
+    onRef = (ref:any) => {
+        this.state.child = ref
     }
 
     public render(): any {
@@ -493,6 +498,7 @@ class UserList extends React.Component<Props, State> {
                     title="编辑用户分组"
                     handleOk={this.handleOk}
                     groups={this.state.groups}
+                    onRef={this.onRef}
                     changeVisible={this.changeVisible}
                 />
             </div>

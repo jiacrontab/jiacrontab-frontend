@@ -26,6 +26,7 @@ interface State {
     showEditGroupName: boolean,
     editorName: string,
     editorGroupId: number
+    child: any
 }
 
 interface Data {
@@ -48,7 +49,8 @@ class GroupList extends React.Component<Props, State> {
             users: [],
             showEditGroupName: false,
             editorName: '',
-            editorGroupId: -1
+            editorGroupId: -1,
+            child: ''
         }
         this.data = {
             token: '',
@@ -115,11 +117,11 @@ class GroupList extends React.Component<Props, State> {
         })
     }
     
-    public handleOk = (e: any) => {
-        e.preventDefault()
-        const form = this.formRef.props.form
-        form.validateFields((err: any, values: any) => {
-            if (!err) {
+    public handleOk = (values:any) => {
+        // e.preventDefault()
+        // const form = this.formRef.props.form
+        // form.validateFields((err: any, values: any) => {
+        //     if (!err) {
                 let paramsData = {
                     groupName: values.groupName,
                     groupID: this.state.editorGroupId
@@ -130,7 +132,7 @@ class GroupList extends React.Component<Props, State> {
                     token: this.data.token,
                     data: paramsData,
                     succ: (data: any) => {
-                        form.resetFields()
+                        this.state.child.resetForm()
                         this.setState({
                             showEditGroupName: false
                         })
@@ -138,8 +140,11 @@ class GroupList extends React.Component<Props, State> {
                         this.props.getGroupList()
                     }
                 })
-            }
-        })
+        //     }
+        // })
+    }
+    onRef = (ref:any) => {
+        this.state.child = ref
     }
 
     public render(): any {
@@ -259,6 +264,7 @@ class GroupList extends React.Component<Props, State> {
                     // wrappedComponentRef={this.saveFormRef}
                     handleOk={this.handleOk}
                     groups={this.state.groups}
+                    onRef={this.onRef}
                     changeVisible={this.groupNameVisible}
                 />
             </div>
