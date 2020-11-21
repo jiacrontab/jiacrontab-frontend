@@ -226,7 +226,7 @@ class UserNode extends React.Component<T> {
                 searchTxt: this.data.searchTxt,
             },
             succ: (data: any) => {
-                let nodes = JSON.parse(data)
+                let nodes = data
                 this.data.total = nodes.total
                 this.setState(
                     {

@@ -135,7 +135,7 @@ class NodeDetail extends React.Component<Props> {
                         loading: false
                     },
                     () => {
-                        let templeListData = JSON.parse(data)
+                        let templeListData = data
                         this.data.total = templeListData.total
                         this.setState({
                             crontabList: templeListData.list
@@ -174,7 +174,7 @@ class NodeDetail extends React.Component<Props> {
                         loading: false
                     },
                     () => {
-                        let templeListData = JSON.parse(data)
+                        let templeListData = data
                         this.data.total = templeListData.total
                         this.setState({
                             daemonJobList: templeListData.list
@@ -207,7 +207,7 @@ class NodeDetail extends React.Component<Props> {
             },
             succ: (data: any) => {
                 this.setState({
-                    systemInfo: JSON.parse(data),
+                    systemInfo: data,
                     loading: false
                 })
             },

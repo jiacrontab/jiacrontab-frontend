@@ -113,7 +113,7 @@ class EditDaemon extends React.Component<Props,State> {
                     'addr',
                     this.props.history.location.search
                 )
-                const defaultFormValus: any = JSON.parse(data)
+                const defaultFormValus: any = data
                 
                 let initCurrentValues = { 
                     addr: propsAddr1,
@@ -152,7 +152,7 @@ class EditDaemon extends React.Component<Props,State> {
                     this.state.formRef.current?.setFieldsValue({ initialValues: initCurrentValues})
                 },10)
                 this.setState({
-                    defaultObject: JSON.parse(data)
+                    defaultObject: data
                 })
             }
         })

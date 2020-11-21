@@ -73,7 +73,7 @@ class SettingMail extends React.Component<Props, State> {
             data: {},
             succ: (data: any) => {
                 this.setState({
-                    defaultData: JSON.parse(data).mail
+                    defaultData: data.mail
                 })
             }
         })

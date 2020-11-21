@@ -145,7 +145,7 @@ class Add extends React.Component<Props,State> {
                     'addr',
                     this.props.history.location.search
                 )
-                const defaultFormValus: any = JSON.parse(data)
+                const defaultFormValus: any = data
                 const timeArgs: any = defaultFormValus.timeArgs
                 let resultRely: object[] = []
                 if (
@@ -222,7 +222,7 @@ class Add extends React.Component<Props,State> {
                 },10)
 
                 this.setState({
-                    defaultObject: JSON.parse(data)
+                    defaultObject: data
                 })
             }
         })
@@ -237,7 +237,7 @@ class Add extends React.Component<Props,State> {
                 pagesize: 1000
             },
             succ: (data: any) => {
-                let templeListData = JSON.parse(data)
+                let templeListData = data
                 this.setState({
                     nodeList: templeListData.list
                 })

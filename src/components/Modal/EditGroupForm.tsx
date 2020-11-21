@@ -56,7 +56,7 @@ class EditGroupForm extends React.Component<Props, State> {
             succ: (data: any) => {
                 this.setState({
                     loading: false,
-                    users: JSON.parse(data).list
+                    users: data.list
                 })
             },
             error: () => {
@@ -86,7 +86,7 @@ class EditGroupForm extends React.Component<Props, State> {
                         loading: false
                     },
                     () => {
-                        let templeListData = JSON.parse(data)
+                        let templeListData = data
                         this.setState({
                             nodeListData: templeListData.list
                         })

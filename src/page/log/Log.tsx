@@ -107,7 +107,7 @@ class Log extends React.Component<LogProps, State> {
                 offset: offset
             },
             succ: (data: any) => {
-                const logDatas = JSON.parse(data)
+                const logDatas = data
                 if (logDatas.logList[0] == '' && logDatas.logList.length <= 1) {
                     logDatas.logList = []
                 }

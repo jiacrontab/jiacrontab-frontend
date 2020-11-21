@@ -326,7 +326,7 @@ class CrontabJobList extends React.Component<JobInfo> {
             succ: (data: any) => {
                 this.setState({
                     execModalVisible: true,
-                    execModalData: JSON.parse(data)
+                    execModalData: data
                 })
             },
             error: () => {

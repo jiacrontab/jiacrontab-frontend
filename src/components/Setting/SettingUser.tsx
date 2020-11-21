@@ -62,7 +62,7 @@ class SettingUser extends React.Component<Props, State> {
                 pagesize: 9999
             },
             succ: (data: any) => {
-                let groups = JSON.parse(data)
+                let groups = data
                 this.setState({
                     groups: groups.list
                 })

@@ -83,12 +83,12 @@ class Login extends React.Component<IUserFormProps, State> {
                         () => {
                             //开始跳转
                             if (window.localStorage) {
-                                let templeToken = JSON.parse(data)
+                                let templeToken = data
                                 localStorage.setItem(
                                     'jiaToken',
                                     templeToken.token
                                 )
-                                localStorage.setItem('userInfo', data)
+                                localStorage.setItem('userInfo', JSON.stringify(data))
                             }
                             this.props.history.push('/home')
                         }

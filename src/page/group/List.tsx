@@ -80,7 +80,7 @@ class UserList extends React.Component<Props, State> {
             token: this.data.token,
             data: data,
             succ: (data: any) => {
-                let groups = JSON.parse(data)
+                let groups = data
                 this.data.total = groups.total
                 this.setState({
                     loading: false,
@@ -149,7 +149,7 @@ class UserList extends React.Component<Props, State> {
             token: this.data.token,
             data: data,
             succ: (data: any) => {
-                let users = JSON.parse(data)
+                let users = data
                 this.data.total = users.total
                 this.data.page = users.page
                 this.data.pageSize = users.pagesize
@@ -180,7 +180,7 @@ class UserList extends React.Component<Props, State> {
             token: this.data.token,
             data: data,
             succ: (data: any) => {
-                let nodes = JSON.parse(data)
+                let nodes = data
                 this.data.total = nodes.total
                 this.setState({
                     loading: false,

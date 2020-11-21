@@ -74,7 +74,7 @@ class Home extends React.Component<Props, State> {
             token: this.state.token,
             data: {},
             succ: (data: any) => {
-                const { auditStat, systemInfo, version } = JSON.parse(data)
+                const { auditStat, systemInfo, version } = data
                 this.setState({
                     userStat: auditStat,
                     systemInfo: systemInfo,
@@ -93,7 +93,7 @@ class Home extends React.Component<Props, State> {
                 keywords: this.state.searchTxt
             },
             succ: (data: any) => {
-                const resultData = JSON.parse(data)
+                const resultData = data
                 this.setState({
                     loading: false,
                     isHasMore:
@@ -129,7 +129,7 @@ class Home extends React.Component<Props, State> {
                 keywords: this.state.searchTxt
             },
             succ: (data: any) => {
-                const resultData = JSON.parse(data)
+                const resultData = data
                 this.setState({
                     loading: false,
                     isHasMore:
@@ -361,9 +361,25 @@ class Home extends React.Component<Props, State> {
             },
             () => {
                 if (this.state.defalutList == 'job') {
-                    this.getJobHistory(0)
+                    this.setState(
+                        {
+                            loadingMore: true,
+                            listData: []
+                        },
+                        () => {
+                            this.getJobHistory(0)
+                        }
+                    )
                 } else {
-                    this.getActivityList(0)
+                    this.setState(
+                        {
+                            loadingMore: true,
+                            listData: []
+                        },
+                        () => {
+                            this.getActivityList(0)
+                        }
+                    )
                 }
             }
         )

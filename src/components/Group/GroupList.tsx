@@ -75,7 +75,7 @@ class GroupList extends React.Component<Props, State> {
             },
             succ: (data: any) => {
                 this.setState({
-                    users: JSON.parse(data).list
+                    users: data.list
                 })
                 callback()
                 this.props.changeLoading(false)
