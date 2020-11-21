@@ -15,9 +15,17 @@ const API = {
         method: 'post',
         url: '/v2/user/job_history'
     },
-    CleanJobHistory: {
+    logInfo: {
         method: 'post',
-        url: '/v2/user/job_history/clean'
+        url: '/v2/log/info'
+    },
+    CleanLog: {
+        method: 'post',
+        url: '/v2/log/clean'
+    },
+    CleanNodeLog: {
+        method: 'post',
+        url: '/v2/node/clean_log'
     },
     NodeList: {
         method: 'post',

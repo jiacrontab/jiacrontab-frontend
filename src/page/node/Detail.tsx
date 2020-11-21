@@ -292,8 +292,9 @@ class NodeDetail extends React.Component<Props> {
                                 addr={addr}
                             />
                         </TabPane>
-                        <TabPane tab="运行信息" key="3">
+                        <TabPane tab="节点信息" key="3">
                             <SystemInfo
+                                resetInfo={this.getSystemInfo}
                                 infoData={this.state.systemInfo}
                                 history={this.props}
                                 loading={this.state.loading}

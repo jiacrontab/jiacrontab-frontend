@@ -93,7 +93,7 @@ class SettingMenu extends React.Component<Props, State> {
                 {groupID === 1 && root ? (
                     <Menu.Item key="disk">
                         <ClearOutlined />
-                        磁盘清理
+                        数据清理
                     </Menu.Item>
                 ) : null}
                 
