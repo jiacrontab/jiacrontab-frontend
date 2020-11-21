@@ -41,9 +41,9 @@ class Log extends React.Component<LogProps, State> {
             searchDate: '',
             searchTextTemp: '',
             searchDateTemp: '',
-            isTail: false,
+            isTail: true,
             noMoreData: false,
-            offset: 0,
+            offset: -1,
             tempTail: false
         }
     }
@@ -177,7 +177,7 @@ class Log extends React.Component<LogProps, State> {
                 initLoading: true,
                 logList: [],
                 loading: false,
-                offset: !this.state.tempTail ? 0 : -1,
+                offset: this.state.tempTail ? -1 : 0,
                 noMoreData: false,
                 isTail: this.state.tempTail,
                 searchText: this.state.searchTextTemp,
@@ -306,7 +306,6 @@ class Log extends React.Component<LogProps, State> {
                             onChange={this.switchChange}
                             unCheckedChildren="倒序"
                             style={{ marginRight: '12px' }}
-                            defaultChecked
                         />
                         <Button
                             type="primary"
