@@ -338,7 +338,7 @@ class UserList extends React.Component<Props, State> {
                 dataIndex: 'username',
                 key: 'username'
             },
-            { title: '分组', dataIndex: 'group.name', key: 'group.name' },
+            { title: '分组', dataIndex: ["group","name"], key: ["group","name"] },
             {
                 title: 'root',
                 dataIndex: 'root',

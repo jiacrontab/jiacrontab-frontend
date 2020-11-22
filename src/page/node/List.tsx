@@ -2,7 +2,7 @@
 import React from 'react';
 import { Form } from 'antd';
 // import '@ant-design/compatible/assets/index.css';
-import { Table, Button, Input, Tabs } from 'antd';
+import { Table, Button, Input, Tabs,Modal } from 'antd';
 import BaseLayout from '../../layout/BaseLayout'
 import API from '../../config/api'
 import { getRequest, getGroupID } from '../../utils/utils'
@@ -263,6 +263,40 @@ class UserNode extends React.Component<T> {
         }
         this.props.history.push(path)
     }
+    public removeNodeList(record: any) {
+        Modal.confirm({
+            content: '您确定要删除吗？',
+            onOk: () => {
+                this.removeErrorNode(record)
+            }
+        });
+    }
+    public removeErrorNode(record:any) {
+        this.setState({
+            loading: true
+        })
+        getRequest({
+            url: API.nodeDelete,
+            token: this.data.token,
+            data: {
+                groupID: record.groupID,
+                addr: record.addr
+            },
+            succ: (data: any) => {
+                this.getNodeList(this.data.token)
+            },
+            error: () => {
+                this.setState({
+                    loading: false
+                })
+            },
+            catch: () => {
+                this.setState({
+                    loading: false
+                })
+            }
+        })
+    }
 
     private reload() {
         this.getNodeList(this.data.token)
@@ -315,7 +349,7 @@ class UserNode extends React.Component<T> {
                     }
                 }
             },
-            { title: '分组', dataIndex: 'group.name', key: 'group.name' },
+            { title: '分组', dataIndex: ["group","name"], key: ["group","name"] },
             {
                 title: '运行的定时任务',
                 dataIndex: 'crontabTaskNum',
@@ -343,14 +377,32 @@ class UserNode extends React.Component<T> {
             },
             {
                 title: '操作',
-                width: '100px',
+                width: '150px',
                 key: 'operation',
                 render: (record: any) => {
                     if (!record.disabled) {
                         return (
+                            <React.Fragment>
+
+                                <Button
+                                    htmlType="button"
+                                    size="small"
+                                    type="primary"
+                                    onClick={() => {
+                                        this.handleSee(record)
+                                    }}
+                                >
+                                    查看
+                                </Button>
+                            </React.Fragment>
+                        )
+                    }
+                    return (
+                        <React.Fragment>
                             <Button
-                                htmlType="button"
+                                disabled={true}
                                 size="small"
+                                htmlType="button"
                                 type="primary"
                                 onClick={() => {
                                     this.handleSee(record)
@@ -358,20 +410,18 @@ class UserNode extends React.Component<T> {
                             >
                                 查看
                             </Button>
-                        )
-                    }
-                    return (
-                        <Button
-                            disabled={true}
-                            size="small"
-                            htmlType="button"
-                            type="primary"
-                            onClick={() => {
-                                this.handleSee(record)
-                            }}
-                        >
-                            查看
-                        </Button>
+                            <Button
+                                htmlType="button"
+                                size="small"
+                                danger
+                                style={{ marginLeft: 8 }}
+                                onClick={() => {
+                                    this.removeNodeList(record)
+                                }}
+                            >
+                                删除
+                            </Button>
+                        </React.Fragment>
                     )
                 }
             }
@@ -417,7 +467,7 @@ class UserNode extends React.Component<T> {
                     </Tabs>
                 <div className="jia-table table-reset">
                     <Search
-                            placeholder="节点名"
+                            placeholder="关键词"
                             onSearch={value => {
                                 this.data.searchTxt = value
                                 this.data.page = 1
