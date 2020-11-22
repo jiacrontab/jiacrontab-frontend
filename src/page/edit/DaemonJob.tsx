@@ -192,11 +192,11 @@ class EditDaemon extends React.Component<Props,State> {
             newPrams.workEnv = trimEmpty(values.workEnv.split(','))
         }
 
-        newPrams.errorMailNotify = values.taskError.includes('errorMailNotify')
+        newPrams.errorMailNotify = values.taskError && values.taskError.includes('errorMailNotify')
             ? true
             : false
 
-        newPrams.errorAPINotify = values.taskError.includes('errorAPINotify')
+        newPrams.errorAPINotify = values.taskError && values.taskError.includes('errorAPINotify')
             ? true
             : false
 
@@ -407,8 +407,8 @@ class EditDaemon extends React.Component<Props,State> {
                                 
                             </Form.Item>
 
-                            <Form.Item {...formItemLayout} label="失败重启" name="failRestart">
-                                <Switch checked={defaultFormValus.failRestart} />
+                            <Form.Item {...formItemLayout} label="失败重启" name="failRestart" valuePropName="checked">
+                                <Switch />
                             </Form.Item>
                             <Form.Item {...formItemLayout} label="失败重试次数" name="retryNum">
                                 <InputNumber

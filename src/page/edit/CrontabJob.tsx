@@ -179,15 +179,10 @@ class Add extends React.Component<Props,State> {
                     : '',
                     timeout: defaultFormValus.timeout || 0,
                     timeoutTrigger: defaultFormValus.timeoutTrigger ? defaultFormValus.timeoutTrigger : [],
-                    killChildProcess: [
-                        (defaultFormValus.killChildProcess ===
-                            true &&
-                            'true') ||
-                        (defaultFormValus.killChildProcess ===
-                            false &&
-                            'false') ||
-                        'true'
-                    ],
+                    killChildProcess: defaultFormValus.killChildProcess ? ['childProcess'] : [],
+                    // killChildProcess: [
+                    //     defaultFormValus.killChildProcess
+                    // ],
                     retryNum: defaultFormValus.retryNum || 0,
                     mailTo: defaultFormValus.mailTo
                     ? defaultFormValus.mailTo.join(',')
@@ -250,6 +245,7 @@ class Add extends React.Component<Props,State> {
         })
     }
     private parseValues = (values: any) => {
+        console.log(values)
         let newPrams: any = {
             addr: values.addr,
             isSync: values.isSync === 'synchrony' ? true : false,
@@ -257,9 +253,9 @@ class Add extends React.Component<Props,State> {
             command: trimEmpty(values.command.split(' ')),
             code: values.code,
             maxConcurrent: values.maxConcurrent,
-            killChildProcess: values.killChildProcess.includes('false')
-                ? false
-                : true,
+            killChildProcess: values.killChildProcess && values.killChildProcess.includes('childProcess')
+            ? true
+            : false,
             second: values.second,
             minute: values.minute,
             hour: values.hour,
@@ -291,11 +287,11 @@ class Add extends React.Component<Props,State> {
             newPrams.workIp = trimEmpty(values.workIp.split(','))
         }
 
-        newPrams.errorMailNotify = values.taskError.includes('errorMailNotify')
+        newPrams.errorMailNotify = values.taskError && values.taskError.includes('errorMailNotify')
             ? true
             : false
 
-        newPrams.errorAPINotify = values.taskError.includes('errorAPINotify')
+        newPrams.errorAPINotify = values.taskError && values.taskError.includes('errorAPINotify')
             ? true
             : false
 
@@ -570,7 +566,7 @@ class Add extends React.Component<Props,State> {
                             <Form.Item {...formItemLayout} label="子进程" name="killChildProcess">
                                 
                                 <Checkbox.Group>
-                                    <Checkbox value="false">
+                                    <Checkbox value="childProcess">
                                         主进程退出后允许子进程继续存在
                                     </Checkbox>
                                 </Checkbox.Group>
