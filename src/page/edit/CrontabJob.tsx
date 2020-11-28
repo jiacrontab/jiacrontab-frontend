@@ -245,7 +245,6 @@ class Add extends React.Component<Props,State> {
         })
     }
     private parseValues = (values: any) => {
-        console.log(values)
         let newPrams: any = {
             addr: values.addr,
             isSync: values.isSync === 'synchrony' ? true : false,

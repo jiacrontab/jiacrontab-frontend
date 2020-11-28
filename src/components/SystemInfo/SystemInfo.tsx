@@ -16,6 +16,7 @@ interface Props {
 interface State {
     loading: boolean
     token: any
+    userInfo: any
     formRef: React.RefObject<FormInstance>
 }
 class SystemInfo extends React.Component<Props, State> {
@@ -24,11 +25,13 @@ class SystemInfo extends React.Component<Props, State> {
         this.state = {
             loading: false,
             token: '',
+            userInfo: '',
             formRef: React.createRef<FormInstance>()
         }
     }
     componentDidMount() {
         this.setState({ token: localStorage.getItem('jiaToken') })
+        this.setState({ userInfo: localStorage.getItem('userInfo') })
     }
     public changeLoading = (loadingStatus: boolean) => {
         this.setState({
@@ -37,9 +40,7 @@ class SystemInfo extends React.Component<Props, State> {
     }
 
     private handleSubmit = (e: any) => {
-        console.log(getUrlParam('addr', this.props.history.location.search),'99900')
         this.state.formRef.current?.validateFields().then((values) => {
-            console.log(values)
             this.setState({
                 loading: true
             })
@@ -93,6 +94,13 @@ class SystemInfo extends React.Component<Props, State> {
             labelCol: { span: 0 },
             wrapperCol: { span: 24 }
         }
+        const { userInfo } = this.state
+        const userDatas = userInfo ? JSON.parse(userInfo) : {}
+        // if (userInfo) {
+        //     const userDatas = JSON.parse(userInfo)
+        //     // const groupID = userDatas.groupID
+        //     // const root = userDatas.root
+        // }
 
         return (
             <div
@@ -122,56 +130,58 @@ class SystemInfo extends React.Component<Props, State> {
                         </tbody>
                     </table>
                 </Spin>
-                <div>
-                    <Form 
-                        onFinish={this.handleSubmit} 
-                        style={{ marginTop: 26 }} 
-                        ref={this.state.formRef}
-                        layout="inline" 
-                    >
-                        
-                        <Form.Item 
-                            {...formItemLayout} 
-                            label="清理"
+                {userDatas.groupID === 1 && userDatas.root ? (
+                    <div>
+                        <Form 
+                            onFinish={this.handleSubmit} 
+                            style={{ marginTop: 26 }} 
+                            ref={this.state.formRef}
+                            layout="inline" 
                         >
-                            <Input.Group compact>
-                                <Form.Item 
-                                    name="offset" 
-                                    {...formItemLayout}
-                                    rules={[{ required: true, message: '请输入时间' }]}
-                                >
-                                    <Input type="number" size="large" style={{ width: 130 }} placeholder="请输入时间"/>
-                                </Form.Item>
-                                <Form.Item 
-                                    name="unit" 
-                                    {...formItemLayout}
-                                    rules={[{ required: true, message: '请选择单位' }]}
-                                >
-                                    <Select size="large" style={{ width: 120 }} allowClear placeholder="选择单位">
-                                        <Select.Option value="month">月</Select.Option>
-                                        {/* <Select.Option value="week">周前</Select.Option> */}
-                                        <Select.Option value="day">日</Select.Option>
-                                        {/* <Select.Option value="hour">小时前</Select.Option> */}
-                                    </Select>
-                                </Form.Item>
-                            </Input.Group>
-                        </Form.Item>
-                        <Form.Item style={{ marginTop: 4,marginLeft:-22 }}>
-                            <span>前的日志文件</span>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button
-                                style={{ minWidth: 120, height: 38 }}
-                                className="ant-btn-primary"
-                                htmlType="submit"
-                                loading={this.state.loading}
+                            
+                            <Form.Item 
+                                {...formItemLayout} 
+                                label="清理"
                             >
-                                提交
-                            </Button>
-                        </Form.Item>
-                        
-                    </Form>
-                </div>
+                                <Input.Group compact>
+                                    <Form.Item 
+                                        name="offset" 
+                                        {...formItemLayout}
+                                        rules={[{ required: true, message: '请输入时间' }]}
+                                    >
+                                        <Input type="number" size="large" style={{ width: 130 }} placeholder="请输入时间"/>
+                                    </Form.Item>
+                                    <Form.Item 
+                                        name="unit" 
+                                        {...formItemLayout}
+                                        rules={[{ required: true, message: '请选择单位' }]}
+                                    >
+                                        <Select size="large" style={{ width: 120 }} allowClear placeholder="选择单位">
+                                            <Select.Option value="month">月</Select.Option>
+                                            {/* <Select.Option value="week">周前</Select.Option> */}
+                                            <Select.Option value="day">日</Select.Option>
+                                            {/* <Select.Option value="hour">小时前</Select.Option> */}
+                                        </Select>
+                                    </Form.Item>
+                                </Input.Group>
+                            </Form.Item>
+                            <Form.Item style={{ marginTop: 4,marginLeft:-22 }}>
+                                <span>前的日志文件</span>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button
+                                    style={{ minWidth: 120, height: 38 }}
+                                    className="ant-btn-primary"
+                                    htmlType="submit"
+                                    loading={this.state.loading}
+                                >
+                                    提交
+                                </Button>
+                            </Form.Item>
+                            
+                        </Form>
+                    </div>
+                ) : null}
 
             </div>
         )
