@@ -129,6 +129,9 @@ class SettingUser extends React.Component<Props, State> {
         })
     }
     private radioChange = (e: any) => {
+        // this.setState({
+        //     radioValue: e.target.value
+        // })
         if (e.target.value === 'new') {
             this.setState({
                 checked: false,
@@ -165,10 +168,10 @@ class SettingUser extends React.Component<Props, State> {
             groupId: this.data.groupID,
             root: this.state.checked
         }
-        setTimeout(() => {
-            this.state.formRef.current?.resetFields()
-            this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue})
-        },10)
+        // setTimeout(() => {
+        //     this.state.formRef.current?.resetFields()
+        //     this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue})
+        // },10)
 
         return (
             <div>

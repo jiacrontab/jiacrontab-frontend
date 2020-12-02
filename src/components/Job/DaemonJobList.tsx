@@ -15,6 +15,7 @@ interface JobInfo {
     total: number
     page: number
     pageSize: number
+    changePage: any
 }
 interface Data {
     token: string | null
@@ -27,7 +28,10 @@ class DaemonJobList extends React.Component<JobInfo> {
     }
 
     state = {
-        selectedRowKeys: []
+        selectedRowKeys: [],
+        page: 1,
+        pageSize: 20,
+        total: 0
     }
 
     public data: Data = {
@@ -177,8 +181,8 @@ class DaemonJobList extends React.Component<JobInfo> {
                     () => {
                         this.props.reload(
                             this.data.searchTxt,
-                            this.props.page,
-                            this.props.pageSize
+                            this.state.page,
+                            this.state.pageSize
                         )
                         this.props.changeLoading(false)
                     }
@@ -215,8 +219,8 @@ class DaemonJobList extends React.Component<JobInfo> {
                     () => {
                         this.props.reload(
                             this.data.searchTxt,
-                            this.props.page,
-                            this.props.pageSize
+                            this.state.page,
+                            this.state.pageSize
                         )
                         this.props.changeLoading(false)
                     }
@@ -439,7 +443,7 @@ class DaemonJobList extends React.Component<JobInfo> {
                             this.props.reload(
                                 this.data.searchTxt,
                                 1,
-                                this.props.pageSize
+                                this.state.pageSize
                             )
                         }}
                         enterButton="查询"
@@ -508,14 +512,29 @@ class DaemonJobList extends React.Component<JobInfo> {
                             current: number,
                             pageSize: number
                         ) => {
-                            this.props.reload(this.data.searchTxt, 1, pageSize)
+                            if(pageSize && pageSize !== this.state.pageSize) {
+                                this.setState({
+                                    page: current,
+                                    pageSize
+                                })
+                                this.props.changePage(current,pageSize)
+                                setTimeout(()=>{
+                                    this.props.reload(this.data.searchTxt)
+                                },200)
+                            }
                         },
-                        onChange: (page: number) => {
-                            this.props.reload(
-                                this.data.searchTxt,
-                                page,
-                                this.props.pageSize
-                            )
+                        onChange: (page: number,pageSize: number) => {
+                            if(page && page !== this.state.page) {
+                                this.setState({
+                                    page,
+                                    pageSize
+                                })
+                                this.props.changePage(page,pageSize)
+                                setTimeout(()=>{
+                                    this.props.reload(this.data.searchTxt)
+                                },200)
+                            }
+                            
                         }
                     }}
                     loading={this.props.loading}

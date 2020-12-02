@@ -85,17 +85,8 @@ class EditorUserPwd extends React.Component<Props, State> {
         })
     }
 
-    private compareToFirstPassword = (rule: any, value: string, callback: any) => {
-        // const { form } = this.state.form;
-        if (value && value !== this.state.formRef.current?.getFieldValue('passwd')) {
-            callback('两次输入的密码不一致，请重新输入!');
-        } else {
-            callback();
-        }
-    }
 
     private submitPwd = (e: any) => {
-        e.preventDefault()
         this.state.formRef.current?.validateFields().then((values) => {
             // if (!err) {
                 this.setState({
@@ -192,7 +183,13 @@ class EditorUserPwd extends React.Component<Props, State> {
                     rules={[
                         { required: true, message: '请确认新密码' },
                         {
-                            validator: this.compareToFirstPassword,
+                            validator: (_, value) =>{
+                                if (value && value == this.state.formRef.current?.getFieldValue('passwd')) {
+                                    return Promise.resolve()
+                                }else{
+                                    return Promise.reject('两次输入的密码不一致，请重新输入!')
+                                }
+                              }
                         }
                     ]}>
                         <Input
