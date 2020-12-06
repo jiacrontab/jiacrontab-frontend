@@ -15,6 +15,7 @@ interface Props extends ModalProps {
     groups: any[]
     changeVisible: any
     onRef?:any
+    currentGroup: any
 }
 interface State {
     radioValue: string
@@ -23,7 +24,7 @@ interface State {
     formRef: React.RefObject<FormInstance>
 }
 interface Data {
-    groupID: number
+    groupID: number | string
 }
 class EditUserGroupForm extends React.Component<
     Props,
@@ -43,8 +44,26 @@ class EditUserGroupForm extends React.Component<
             groupID: 0
         }
     }
+    componentWillReceiveProps(nextProps:any) {
+        if (nextProps.visible) {
+            this.data.groupID = nextProps.currentGroup.groupID
+            this.setState({
+                checked: nextProps.currentGroup.root
+            })
+            if (this.data.groupID == 1) {
+                this.setState({
+                    checked: true,
+                    disabled: true
+                })
+            } else {
+                this.setState({
+                    disabled: false
+                })
+            }
+        }
+    }
 
-    componentDidMount() { 
+    componentDidMount() {
         this.props.onRef(this)
     }
     private handleCancel = () => {
@@ -52,18 +71,22 @@ class EditUserGroupForm extends React.Component<
         this.state.formRef.current?.resetFields();
     }
     private radioChange = (e: any) => {
-        if (e.target.value === 'new') {
+        
+
+        this.setState({
+            radioValue: e.target.value
+        })
+        if (e.target.value !== 'new') {
+            if (this.data.groupID == 1) {
+                this.setState({
+                    checked: true,
+                    disabled: true
+                })
+            }
+        } else {
             this.setState({
                 checked: false,
-                disabled: false,
-                radioValue: e.target.value
-            })
-        } else {
-            this.data.groupID = 1
-            this.setState({
-                checked: true,
-                disabled: true,
-                radioValue: e.target.value
+                disabled: false
             })
         }
     }
@@ -72,6 +95,7 @@ class EditUserGroupForm extends React.Component<
     }
     private handleSubmit = () => {
         this.state.formRef.current?.validateFields().then((values) => {
+            values.root = this.state.checked
             this.props.handleOk(values)
         }) 
     }
@@ -79,12 +103,14 @@ class EditUserGroupForm extends React.Component<
         this.state.formRef.current?.resetFields() 
     }
     render() {
-        // const { form } = this.props
+        const { currentGroup } = this.props
         // const { getFieldDecorator } = form
+        this.data.groupID = currentGroup.groupID
+        
         let defaultValue = {
             types: this.state.radioValue, 
-            groupId:this.data.groupID,
-            root: true
+            groupId: currentGroup.groupID,
+            root: currentGroup.root
         }
         setTimeout(() => {
             this.state.formRef.current?.resetFields()
@@ -158,7 +184,7 @@ class EditUserGroupForm extends React.Component<
                         <Form.Item name="root">
                                 <Checkbox
                                     disabled={this.state.disabled}
-                                    onChange={() => {
+                                    onChange={(val) => {
                                         if (this.data.groupID == 1) {
                                             this.setState({
                                                 disabled: true,
@@ -167,7 +193,7 @@ class EditUserGroupForm extends React.Component<
                                         } else {
                                             this.setState({
                                                 disabled: false,
-                                                checked: !this.state.checked
+                                                checked: val.target.checked
                                             })
                                         }
                                     }}

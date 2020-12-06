@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { List, Skeleton, DatePicker, Input, Switch, Button } from 'antd'
+import { List, Skeleton, DatePicker, Input, Radio, Button } from 'antd'
 import BaseLayout from '../../layout/BaseLayout'
 import API from '../../config/api'
 import { getUrlParam, getRequest } from '../../utils/utils'
@@ -44,7 +44,7 @@ class Log extends React.Component<LogProps, State> {
             isTail: true,
             noMoreData: false,
             offset: -1,
-            tempTail: false
+            tempTail: true
         }
     }
 
@@ -159,9 +159,9 @@ class Log extends React.Component<LogProps, State> {
             searchTextTemp: e.target.value
         })
     }
-    private switchChange = (checked: boolean) => {
+    private switchChange = (e: any) => {
         this.setState({
-            tempTail: !checked
+            tempTail: e.target.value
         })
     }
     private searchLog = () => {
@@ -301,12 +301,16 @@ class Log extends React.Component<LogProps, State> {
                             style={{ width: '180px', marginRight: '12px' }}
                             placeholder="请选择筛选日期"
                         />
-                        <Switch
+                        <Radio.Group onChange={this.switchChange} defaultValue={this.state.isTail}>
+                            <Radio value={false}>顺序</Radio>
+                            <Radio value={true}>倒序</Radio>
+                        </Radio.Group>
+                        {/* <Switch
                             checkedChildren="顺序"
                             onChange={this.switchChange}
                             unCheckedChildren="倒序"
                             style={{ marginRight: '12px' }}
-                        />
+                        /> */}
                         <Button
                             type="primary"
                             htmlType="button"
