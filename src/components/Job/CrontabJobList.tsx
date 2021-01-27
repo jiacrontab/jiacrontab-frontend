@@ -144,7 +144,7 @@ class CrontabJobList extends React.Component<JobInfo> {
                     <p
                         onClick={() => {
                             // this.handleMenuClick(record, 'delete')
-                            this.delete_modal(record)
+                            this.deleteModalShow(record)
                         }}
                     >
                         删除定时任务
@@ -178,7 +178,7 @@ class CrontabJobList extends React.Component<JobInfo> {
                 <p
                     onClick={() => {
                         // this.handleMenuClick(record, 'delete')
-                        this.delete_modal(record)
+                        this.deleteModalShow(record)
                     }}
                 >
                     删除定时任务
@@ -424,7 +424,7 @@ class CrontabJobList extends React.Component<JobInfo> {
             }
         )
     }
-    private delete_modal = (record: any) => {
+    private deleteModalShow = (record: any) => {
         let _this = this
         Modal.confirm({
             title: '操作确认',

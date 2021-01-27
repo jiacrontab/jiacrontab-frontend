@@ -120,7 +120,7 @@ class DaemonJobList extends React.Component<JobInfo> {
                 <p
                     onClick={() => {
                         // this.handleMenuClick(record, 'delete')
-                        this.delete_modal(record)
+                        this.deleteModalShow(record)
                     }}
                 >
                     删除常驻任务
@@ -285,7 +285,7 @@ class DaemonJobList extends React.Component<JobInfo> {
 
         return btnTyps[record.status]
     }
-    private delete_modal = (record: any) => {
+    private deleteModalShow = (record: any) => {
         let _this = this;
         Modal.confirm({
             title: '操作确认',
