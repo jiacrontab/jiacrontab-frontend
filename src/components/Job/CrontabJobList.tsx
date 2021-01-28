@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { DownOutlined } from '@ant-design/icons';
-import { Table, Button, Popover, Input } from 'antd';
+import { DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Table, Button, Popover, Input, Modal } from 'antd';
 import { time, getRequest } from '../../utils/utils'
 import API from '../../config/api'
 import ModalTemple from '../modal'
@@ -143,7 +143,8 @@ class CrontabJobList extends React.Component<JobInfo> {
                     </p>
                     <p
                         onClick={() => {
-                            this.handleMenuClick(record, 'delete')
+                            // this.handleMenuClick(record, 'delete')
+                            this.deleteModalShow(record)
                         }}
                     >
                         删除定时任务
@@ -176,7 +177,8 @@ class CrontabJobList extends React.Component<JobInfo> {
                 </p>
                 <p
                     onClick={() => {
-                        this.handleMenuClick(record, 'delete')
+                        // this.handleMenuClick(record, 'delete')
+                        this.deleteModalShow(record)
                     }}
                 >
                     删除定时任务
@@ -421,6 +423,19 @@ class CrontabJobList extends React.Component<JobInfo> {
                 )
             }
         )
+    }
+    private deleteModalShow = (record: any) => {
+        let _this = this
+        Modal.confirm({
+            title: '操作确认',
+            icon: <ExclamationCircleOutlined />,
+            content: '是否确认删除？',
+            okText: '确认',
+            cancelText: '取消',
+            onOk() {
+                _this.handleMenuClick(record, 'delete')
+            },
+        });
     }
     public render(): any {
         const { selectedRowKeys } = this.state
