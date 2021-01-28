@@ -11,9 +11,11 @@ import API from 'src/config/api'
 interface Props { }
 interface State {
     token: string | null
+    userInfo: any
     loading: boolean
     radioValue: string
     groups: any[]
+    defaultValue: object
     checked: boolean
     disabled: boolean
     formRef: React.RefObject<FormInstance>
@@ -31,6 +33,8 @@ class SettingUser extends React.Component<Props, State> {
             radioValue: 'new',
             groups: [],
             token: '',
+            userInfo: {},
+            defaultValue: {},
             checked: false,
             disabled: false,
             formRef: React.createRef<FormInstance>()
@@ -44,7 +48,8 @@ class SettingUser extends React.Component<Props, State> {
         if (window.localStorage) {
             this.setState(
                 {
-                    token: localStorage.getItem('jiaToken')
+                    token: localStorage.getItem('jiaToken'),
+                    userInfo: localStorage.getItem('userInfo')
                 },
                 () => {
                     this.getGroupList()
@@ -63,9 +68,26 @@ class SettingUser extends React.Component<Props, State> {
             },
             succ: (data: any) => {
                 let groups = data
+
+                const { userInfo } = this.state
+
+                let defaultValue = {
+                    groupType: this.state.radioValue,
+                    groupId: JSON.parse(userInfo).groupID,
+                    root: this.state.checked
+                }
+
                 this.setState({
-                    groups: groups.list
+                    defaultValue
                 })
+                setTimeout(() => {
+                    this.setState({
+                        groups: groups.list
+                    })
+                    this.state.formRef.current?.resetFields()
+                    this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue })
+
+                }, 10)
             }
         })
     }
@@ -99,7 +121,7 @@ class SettingUser extends React.Component<Props, State> {
                     title: '温馨提示',
                     content: '添加成功',
                     onOk: () => {
-                        this.state.formRef.current?.resetFields()
+                        this.getGroupList()
                     }
                 })
             },
@@ -129,26 +151,29 @@ class SettingUser extends React.Component<Props, State> {
         })
     }
     private radioChange = (e: any) => {
-        if (e.target.value === 'new') {
+        this.setState({
+            radioValue: e.target.value
+        })
+        const { defaultValue } = this.state
+        if (e.target.value !== 'new') {
+
+            if (defaultValue['groupId'] == 1) {
+                this.setState({
+                    checked: true,
+                    disabled: true
+                })
+            }
+        } else {
             this.setState({
                 checked: false,
-                disabled: false,
-                radioValue: e.target.value
-            })
-        } else {
-            this.data.groupID = 1
-            this.setState({
-                checked: true,
-                disabled: true,
-                radioValue: e.target.value
+                disabled: false
             })
         }
+
     }
 
     render() {
-        // const { form } = this.props
-        // const { getFieldDecorator } = this.state.form
-        const { groups } = this.state
+        const { groups, defaultValue } = this.state
 
         const formItemLayout = {
             labelCol: { span: 3 },
@@ -160,15 +185,7 @@ class SettingUser extends React.Component<Props, State> {
                 sm: { span: 10, offset: 3 }
             }
         }
-        let defaultValue = {
-            groupType: this.state.radioValue,
-            groupId: this.data.groupID,
-            root: this.state.checked
-        }
-        setTimeout(() => {
-            this.state.formRef.current?.resetFields()
-            this.state.formRef.current?.setFieldsValue({ initialValues: defaultValue})
-        },10)
+
 
         return (
             <div>
@@ -237,8 +254,7 @@ class SettingUser extends React.Component<Props, State> {
                         </Form.Item>
                     ) : (
                             <Form.Item {...formTailLayout} name="groupId">
-
-                                <Select onChange={(id: any, e: any) => {
+                                <Select placeholder="请选择分组" onChange={(id: any, e: any) => {
                                     this.data.groupID = id
                                     if (id == 1) {
                                         this.setState({
@@ -247,11 +263,12 @@ class SettingUser extends React.Component<Props, State> {
                                         })
                                     } else {
                                         this.setState({
+                                            checked: false,
                                             disabled: false
                                         })
                                     }
                                 }}
-                                    placeholder="请选择一个分组">
+                                >
                                     {groups.map((value: any) => {
                                         return (
                                             <Select.Option

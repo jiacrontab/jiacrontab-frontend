@@ -92,7 +92,7 @@ class EditorUserInfo extends React.Component<Props, State> {
 
 
     private submitInfo = (e: any) => {
-        e.preventDefault()
+        // e.preventDefault()
         this.state.formRef.current?.validateFields().then((values) => {
             // if (!err) {
                 this.setState({

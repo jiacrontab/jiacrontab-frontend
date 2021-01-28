@@ -16,19 +16,18 @@ interface Props {
 
 interface State {
     selectKey: string
-
     crontabList: any[]
     daemonJobList: any[]
     userInfo: any
     systemInfo: any
     loading: boolean
+    page: number
+    pageSize: number
+    total: number
 }
 
 interface Data {
-    page: number
-    pageSize: number
     token: any
-    total: number
     searchCrontabJobTxt: string
     searchDaemonJobTxt: string
 }
@@ -40,22 +39,25 @@ class NodeDetail extends React.Component<Props> {
         super(props)
         this.state = {
             selectKey: '1',
-
             crontabList: [],
             daemonJobList: [],
             loading: true,
             userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'),
-            systemInfo: {}
-        }
-        this.data = {
+            systemInfo: {},
             page: 1,
-            token: '',
             pageSize: 20,
             total: 0,
+        }
+        this.data = {
+            token: '',
             searchCrontabJobTxt: '',
             searchDaemonJobTxt: ''
         }
+        
     }
+    
+
+    
 
     public componentDidMount() {
         const propsTabKey = getUrlParam(
@@ -84,8 +86,16 @@ class NodeDetail extends React.Component<Props> {
         }
     }
     private reload = (search: string, page: number, pageSize: number) => {
-        this.data.page = page
-        this.data.pageSize = pageSize
+        if (page) {
+            this.setState({
+                page
+            })
+        }
+        if (pageSize) {
+            this.setState({
+                pageSize
+            })
+        }
 
         this.setState({
             loading: true
@@ -96,10 +106,29 @@ class NodeDetail extends React.Component<Props> {
             this.getDaemonJobList(this.data.token, search)
         }
     }
+    changePage(page:any,pageSize:any) {
+        console.log(page,pageSize,'----')
+        console.log(this.state)
+        if (page) {
+            this.setState({
+                page
+            })
+        }
+        if (pageSize) {
+            this.setState({
+                pageSize
+            })
+        }
+        console.log(this.state,'xdkfsk')
+        
+        
+    }
 
     private tabChange = (activeKey: string) => {
-        this.data.page = 1
-        this.data.pageSize = 20
+        this.setState({
+            page: 1,
+            pageSize: 20
+        })
         this.setState({
             selectKey: activeKey,
             loading: true
@@ -124,8 +153,8 @@ class NodeDetail extends React.Component<Props> {
             url: API.CrontabList,
             token: jiaToken,
             data: {
-                page: this.data.page,
-                pagesize: this.data.pageSize,
+                page: this.state.page,
+                pagesize: this.state.pageSize,
                 addr: getUrlParam('addr', this.props.history.location.search),
                 searchTxt: search
             },
@@ -136,7 +165,7 @@ class NodeDetail extends React.Component<Props> {
                     },
                     () => {
                         let templeListData = data
-                        this.data.total = templeListData.total
+                        this.state.total = templeListData.total
                         this.setState({
                             crontabList: templeListData.list
                         })
@@ -163,8 +192,8 @@ class NodeDetail extends React.Component<Props> {
             url: API.DaemonList,
             token: jiaToken,
             data: {
-                page: this.data.page,
-                pagesize: this.data.pageSize,
+                page: this.state.page,
+                pagesize: this.state.pageSize,
                 addr: getUrlParam('addr', this.props.history.location.search),
                 searchTxt: search
             },
@@ -175,7 +204,7 @@ class NodeDetail extends React.Component<Props> {
                     },
                     () => {
                         let templeListData = data
-                        this.data.total = templeListData.total
+                        this.state.total = templeListData.total
                         this.setState({
                             daemonJobList: templeListData.list
                         })
@@ -271,11 +300,12 @@ class NodeDetail extends React.Component<Props> {
                                 jobData={this.state.crontabList}
                                 loading={this.state.loading}
                                 currentKey="1"
-                                page={this.data.page}
-                                pageSize={this.data.pageSize}
-                                total={this.data.total}
+                                page={this.state.page}
+                                pageSize={this.state.pageSize}
+                                total={this.state.total}
                                 history={this.props.history}
                                 addr={addr}
+                                changePage={this.changePage.bind(this)}
                             />
                         </TabPane>
                         <TabPane tab="常驻任务" key="2">
@@ -285,11 +315,12 @@ class NodeDetail extends React.Component<Props> {
                                 jobData={this.state.daemonJobList}
                                 loading={this.state.loading}
                                 currentKey="2"
-                                page={this.data.page}
-                                pageSize={this.data.pageSize}
-                                total={this.data.total}
+                                page={this.state.page}
+                                pageSize={this.state.pageSize}
+                                total={this.state.total}
                                 history={this.props.history}
                                 addr={addr}
+                                changePage={this.changePage.bind(this)}
                             />
                         </TabPane>
                         <TabPane tab="节点信息" key="3">

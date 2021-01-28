@@ -20,7 +20,8 @@ interface State {
     showEditUserGroupForm: boolean
     nodeListData: any[],
     formRef: React.RefObject<FormInstance>
-    child: any
+    child: any,
+    currentGroup: any
 }
 
 interface Data {
@@ -46,7 +47,8 @@ class UserList extends React.Component<Props, State> {
             users: [],
             nodeListData: [],
             formRef: React.createRef<FormInstance>(),
-            child: ''
+            child: '',
+            currentGroup: {},
         }
         this.data = {
             page: 1,
@@ -271,6 +273,9 @@ class UserList extends React.Component<Props, State> {
 
     private handle(record: any) {
         this.data.settingUserID = record.ID
+        this.setState({
+            currentGroup: record
+        })
         this.getAllGroups(() => {
             this.setState({
                 showEditUserGroupForm: true
@@ -498,6 +503,7 @@ class UserList extends React.Component<Props, State> {
                     title="编辑用户分组"
                     handleOk={this.handleOk}
                     groups={this.state.groups}
+                    currentGroup={this.state.currentGroup}
                     onRef={this.onRef}
                     changeVisible={this.changeVisible}
                 />
