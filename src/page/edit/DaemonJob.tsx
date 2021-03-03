@@ -43,9 +43,10 @@ class EditDaemon extends React.Component<Props,State> {
     private defObj: {
         mailTo: string[]
         APITo: string[]
+        DingdingTo: string[]
         WorkIp: string[]
         command: [[]]
-    } = { mailTo: [], APITo: [], WorkIp: [], command: [[]] }
+    } = { mailTo: [], APITo: [], DingdingTo: [], WorkIp: [], command: [[]] }
 
     // state = {
     //     token: '',
@@ -134,12 +135,16 @@ class EditDaemon extends React.Component<Props,State> {
                     ? defaultFormValus.mailTo.join(',')
                     : '',
                     APITo:defaultFormValus.APITo ? defaultFormValus.APITo.join(',') : '',
+                    DingdingTo:defaultFormValus.DingdingTo ? defaultFormValus.DingdingTo.join(',') : '',
                     taskError:[
                         (defaultFormValus.errorMailNotify &&
                             'errorMailNotify') ||
                         '',
                         (defaultFormValus.errorAPINotify &&
                             'errorAPINotify') ||
+                        '',
+                        (defaultFormValus.errorDingdingNotify &&
+                            'errorDingdingNotify') ||
                         ''
                     ]
                 }
@@ -183,6 +188,9 @@ class EditDaemon extends React.Component<Props,State> {
         if (values.APITo !== undefined) {
             newPrams.APITo = trimEmpty(values.APITo.split(','))
         }
+        if (values.DingdingTo !== undefined) {
+            newPrams.DingdingTo = trimEmpty(values.DingdingTo.split(','))
+        }
 
         if (values.workIp !== undefined) {
             newPrams.workIp = trimEmpty(values.workIp.split(','))
@@ -200,6 +208,10 @@ class EditDaemon extends React.Component<Props,State> {
             ? true
             : false
 
+        newPrams.errorDingdingNotify = values.taskError && values.taskError.includes('errorDingdingNotify')
+            ? true
+            : false
+            
         if (values.workDir !== undefined) {
             newPrams.workDir = values.workDir
         }
@@ -424,6 +436,9 @@ class EditDaemon extends React.Component<Props,State> {
                                 <Input placeholder="请输入api地址" />
                             </Form.Item>
 
+                            <Form.Item {...formItemLayout} label="钉钉webhook地址" name="DingdingTo">
+                                <Input placeholder="请输入钉钉webhook地址（包含关键词：告警）,多个地址以逗号分割" />
+                            </Form.Item>
                             <Form.Item {...formItemLayoutWithOutLabel} name="taskError">
                                 <Checkbox.Group>
                                     <Checkbox value="errorMailNotify">
@@ -431,6 +446,9 @@ class EditDaemon extends React.Component<Props,State> {
                                     </Checkbox>
                                     <Checkbox value="errorAPINotify">
                                         任务执行失败api通知
+                                    </Checkbox>
+                                    <Checkbox value="errorDingdingNotify">
+                                        任务执行失败钉钉通知
                                     </Checkbox>
                                 </Checkbox.Group>
                                 

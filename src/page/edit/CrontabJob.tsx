@@ -61,6 +61,7 @@ class Add extends React.Component<Props,State> {
     private defObj: {
         mailTo: string[]
         APITo: string[]
+        DingdingTo: string[]
         workEnv: string[]
         command: string[]
         timeArgs: any
@@ -68,6 +69,7 @@ class Add extends React.Component<Props,State> {
     } = {
             mailTo: [],
             APITo: [],
+            DingdingTo: [],
             workEnv: [],
             command: [],
             timeArgs: {},
