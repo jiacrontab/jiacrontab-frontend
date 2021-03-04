@@ -61,6 +61,7 @@ class Add extends React.Component<Props,State> {
     private defObj: {
         mailTo: string[]
         APITo: string[]
+        DingdingTo: string[]
         workEnv: string[]
         command: string[]
         timeArgs: any
@@ -68,6 +69,7 @@ class Add extends React.Component<Props,State> {
     } = {
             mailTo: [],
             APITo: [],
+            DingdingTo: [],
             workEnv: [],
             command: [],
             timeArgs: {},
@@ -188,6 +190,7 @@ class Add extends React.Component<Props,State> {
                     ? defaultFormValus.mailTo.join(',')
                     : '',
                     APITo:defaultFormValus.APITo ? defaultFormValus.APITo.join(',') : '',
+                    DingdingTo:defaultFormValus.DingdingTo ? defaultFormValus.DingdingTo.join(',') : '',
                     maxConcurrent: defaultFormValus.maxConcurrent || 1,
                     second: timeArgs.second,
 
@@ -204,6 +207,9 @@ class Add extends React.Component<Props,State> {
                         '',
                         (defaultFormValus.errorAPINotify &&
                             'errorAPINotify') ||
+                        '',
+                        (defaultFormValus.errorDingdingNotify &&
+                            'errorDingdingNotify') ||
                         ''
                     ]
                 }
@@ -274,6 +280,9 @@ class Add extends React.Component<Props,State> {
         if (values.APITo !== undefined) {
             newPrams.APITo = trimEmpty(values.APITo.split(','))
         }
+        if (values.DingdingTo !== undefined) {
+            newPrams.DingdingTo = trimEmpty(values.DingdingTo.split(','))
+        }
         if (values.timeoutTrigger !== undefined) {
             newPrams.timeoutTrigger = values.timeoutTrigger
         }
@@ -291,6 +300,10 @@ class Add extends React.Component<Props,State> {
             : false
 
         newPrams.errorAPINotify = values.taskError && values.taskError.includes('errorAPINotify')
+            ? true
+            : false
+
+        newPrams.errorDingdingNotify = values.taskError && values.taskError.includes('errorDingdingNotify')
             ? true
             : false
 
@@ -557,6 +570,9 @@ class Add extends React.Component<Props,State> {
                                     <Checkbox value="CallApi">
                                         api通知
                                     </Checkbox>
+                                    <Checkbox value="DingdingWebhook">
+                                        钉钉通知
+                                    </Checkbox>
                                     <Checkbox value="Kill">强杀</Checkbox>
                                 </Checkbox.Group>
                                 
@@ -589,6 +605,11 @@ class Add extends React.Component<Props,State> {
                             <Form.Item {...formItemLayout} label="api地址" name="APITo">
                                 
                                 <Input placeholder="请输入api地址,多个地址以逗号分割" />
+                                
+                            </Form.Item>
+                            <Form.Item {...formItemLayout} label="钉钉webhook地址" name="DingdingTo">
+                                
+                                <Input placeholder="请输入钉钉webhook地址（包含关键词：告警）,多个地址以逗号分割" />
                                 
                             </Form.Item>
                             <Form.Item 
@@ -871,6 +892,9 @@ class Add extends React.Component<Props,State> {
                                     </Checkbox>
                                     <Checkbox value="errorAPINotify">
                                         任务执行失败api通知
+                                    </Checkbox>
+                                    <Checkbox value="errorDingdingNotify">
+                                        任务执行失败钉钉通知
                                     </Checkbox>
                                 </Checkbox.Group>
                                 
